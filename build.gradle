@@ -1,0 +1,92 @@
+buildscript {
+    ext {
+        kestraVersion = "0.1.+"
+        micronautVersion = "1.2.8"
+        lombokVersion = "1.18.10"
+    }
+}
+
+plugins {
+    id "java-library"
+    id "idea"
+    id "com.adarshr.test-logger" version "2.0.0"
+}
+
+repositories {
+    jcenter()
+    maven { url  "https://dl.bintray.com/kestra/maven" }
+}
+
+version "0.1.0-SNAPSHOT"
+sourceCompatibility = 11
+
+configurations {
+    libs
+}
+
+dependencies {
+    // micronaut
+    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation "io.micronaut:micronaut-inject"
+
+    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
+
+    // lombok
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+
+    // kestra
+    implementation group: "org.kestra", name: "core", version: kestraVersion
+
+    // test deps needed only for ExampleRunnerTest
+    testImplementation group: "org.kestra", name: "repository-memory", version: kestraVersion
+    testImplementation group: "org.kestra", name: "runner-memory", version: kestraVersion
+    testImplementation group: "org.kestra", name: "storage-local", version: kestraVersion
+
+    // test
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.5.2"
+    testImplementation "org.hamcrest:hamcrest:2.2"
+    testImplementation "org.hamcrest:hamcrest-library:2.2"
+
+    // libs
+    // use "libs" to include all your needed dependencies in final jar
+    libs group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+
+    configurations.implementation.extendsFrom(configurations.libs)
+}
+
+jar {
+    from {
+        configurations.libs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+testlogger {
+    theme "mocha-parallel"
+    showExceptions true
+    showFullStackTraces true
+    showStandardStreams true
+    showPassedStandardStreams false
+    showSkippedStandardStreams true
+}
+
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+    options.compilerArgs.add("-parameters")
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
