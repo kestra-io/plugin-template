@@ -33,6 +33,7 @@ tasks.withType(JavaCompile){
 configurations {
     libs
 }
+configurations.implementation.extendsFrom(configurations.libs)
 
 dependencies {
     // micronaut
