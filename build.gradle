@@ -57,8 +57,6 @@ dependencies {
     // libs
     // use "libs" to include all your needed dependencies in final jar
     libs group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-
-    configurations.implementation.extendsFrom(configurations.libs)
 }
 
 
@@ -79,7 +77,7 @@ testlogger {
 }
 
 dependencies {
-    // test deps needed only for ExampleRunnerTest
+    // test deps needed only for to have a runner
     testImplementation group: "org.kestra", name: "repository-memory", version: kestraVersion
     testImplementation group: "org.kestra", name: "runner-memory", version: kestraVersion
     testImplementation group: "org.kestra", name: "storage-local", version: kestraVersion

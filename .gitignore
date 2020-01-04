@@ -13,3 +13,4 @@ out/
 .settings
 .classpath
 .attach*
+src/test/resources/application-test.yml
