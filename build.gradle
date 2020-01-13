@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kestraVersion = "0.1.+"
-        micronautVersion = "1.2.8"
+        micronautVersion = "1.3.+"
         lombokVersion = "1.18.10"
         githubUrl = "kestra-io/" + project.name
     }
@@ -19,13 +19,13 @@ plugins {
 repositories {
     mavenCentral()
     jcenter()
-    maven { url  "https://dl.bintray.com/kestra/maven" }
+    maven { url "https://dl.bintray.com/kestra/maven" }
 }
 
 sourceCompatibility = 11
 group "io.kestra.task.templates"
 
-tasks.withType(JavaCompile){
+tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
 }
