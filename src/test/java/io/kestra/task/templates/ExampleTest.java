@@ -6,7 +6,6 @@ import io.micronaut.test.annotation.MicronautTest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.kestra.core.runners.RunContext;
-import org.kestra.core.runners.RunOutput;
 
 import javax.inject.Inject;
 
@@ -33,8 +32,8 @@ class ExampleTest {
             .format("Hello {{ variable }}")
             .build();
 
-        RunOutput runOutput = task.run(runContext);
+        Example.Output runOutput = task.run(runContext);
 
-        assertThat(runOutput.getOutputs().get("example"), is(StringUtils.reverse("Hello John Doe")));
+        assertThat(runOutput.getChild().getValue(), is(StringUtils.reverse("Hello John Doe")));
     }
 }

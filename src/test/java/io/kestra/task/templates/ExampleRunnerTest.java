@@ -11,11 +11,13 @@ import org.kestra.runner.memory.MemoryRunner;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 /**
  * This test will load all flow located in `src/test/resources/flows/`
@@ -40,10 +42,12 @@ class ExampleRunnerTest {
         this.runner.run();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void flow() throws TimeoutException {
         Execution execution = runnerUtils.runOne("org.kestra.templates", "example");
 
         assertThat(execution.getTaskRunList(), hasSize(3));
+        assertThat(((Map<String, Object>)execution.getTaskRunList().get(2).getOutputs().get("child")).get("value"), is("task-id"));
     }
 }

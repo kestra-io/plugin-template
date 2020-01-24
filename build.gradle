@@ -42,11 +42,6 @@ dependencies {
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     implementation "io.micronaut:micronaut-inject"
 
-    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
-    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
-    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    testImplementation "io.micronaut.test:micronaut-test-junit5"
-
     // lombok
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     compileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -56,7 +51,8 @@ dependencies {
 
     // libs
     // use "libs" to include all your needed dependencies in final jar
-    libs group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    // simple example below not needed
+    libs group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
 }
 
 
@@ -77,6 +73,11 @@ testlogger {
 }
 
 dependencies {
+    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
+
     // test deps needed only for to have a runner
     testImplementation group: "org.kestra", name: "repository-memory", version: kestraVersion
     testImplementation group: "org.kestra", name: "runner-memory", version: kestraVersion
@@ -153,6 +154,7 @@ bintray {
         }
     }
 }
+
 /**********************************************************************************************************************\
  * Version
  **********************************************************************************************************************/
