@@ -32,18 +32,21 @@ test to configure in-memory runner.
 ### Libs
 We may need to use some third party libs in order to develop plugins  
 (third party api, helper classes, ...). By default, the generated jar will not contains 
-any dependencies. In order to add you dependencies, you will need to add a specials gradle 
-dependencies names `libs` :  
+any dependencies. In order to add you dependencies, you will need to add a gradle 
+dependencies `implementation` :  
 ```groovy
     // libs
-    libs group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 ``` 
-Using this, the dependencies will be included in the jar, but take care that you must not 
-include any dependencies that is already used in kestra `core` or any others plugin with 
-a conflicting version.
+The other dependencies (especially `kestra.core` & `micronaut`) is configured to be only `compileOnly` 
+in order to not be exported with plugins.
 
-[Guava](https://github.com/google/guava) libs is already included and can be used in any
-plugins and must not be added as dependency in gradle configuration.
+Some libs are already included and can be used in any plugins and must not be added as 
+dependency in gradle configuration :
+* [Guava](https://github.com/google/guava) 
+* [Commons IO](https://commons.apache.org/proper/commons-io/)
+* [Commons Lang](https://commons.apache.org/proper/commons-lang/)
+
 
 ## License
 Apache 2.0 © [Nigh Tech](https://nigh.tech)
