@@ -31,11 +31,6 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add("-parameters")
 }
 
-configurations {
-    libs
-}
-configurations.implementation.extendsFrom(configurations.libs)
-
 dependencies {
     // micronaut
     annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
@@ -91,6 +86,16 @@ dependencies {
 /**********************************************************************************************************************\
  * Publish
  **********************************************************************************************************************/
+jar {
+    manifest {
+        attributes(
+                "X-Kestra-Title": project.name,
+                "X-Kestra-Group": project.group,
+                "X-Kestra-Version": project.version
+        )
+    }
+}
+
 shadowJar {
     archiveClassifier.set(null)
     mergeServiceFiles()
