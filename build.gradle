@@ -1,18 +1,21 @@
 buildscript {
     ext {
         kestraVersion = "0.1.+"
-        micronautVersion = "1.3.+"
-        lombokVersion = "1.18.10"
+        micronautVersion = "1.3.5"
+        lombokVersion = "1.18.12"
         githubUrl = "kestra-io/" + project.name
     }
 }
 
 plugins {
-    id "java-library"
+    id "java"
+    id 'java-library'
     id "idea"
     id "com.adarshr.test-logger" version "2.0.0"
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "maven-publish"
+    id 'ru.vyarus.java-lib' version '2.1.0'
+    id 'ru.vyarus.github-info' version '1.2.0'
     id "com.jfrog.bintray" version "1.8.4"
     id 'net.researchgate.release' version '2.8.1'
 }
@@ -46,7 +49,7 @@ dependencies {
     compileOnly group: "org.kestra", name: "core", version: kestraVersion
 
     // libs included in the final jar
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    api group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
 }
 
 
@@ -101,22 +104,9 @@ shadowJar {
     mergeServiceFiles()
 }
 
-
-javadoc {
-    options {
-        locale = 'en_US'
-        encoding = 'UTF-8'
-    }
-}
-
-task sourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar) {
-    archiveClassifier.set('javadoc')
-    from javadoc
+github {
+    user 'kestra-io'
+    license 'Apache'
 }
 
 publishing {
@@ -143,13 +133,7 @@ bintray {
         userOrg = 'kestra'
         name = project.name
         repo = 'maven'
-        websiteUrl = 'https://kestra.io'
-        issueTrackerUrl = "https://github.com/${githubUrl}/issues"
-        vcsUrl = "https://github.com/${githubUrl}"
-        licenses = ['Apache-2.0']
         publicDownloadNumbers = true
-        githubRepo = githubUrl
-        githubReleaseNotesFile = 'README.md'
         version {
             name = project.version
             released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
