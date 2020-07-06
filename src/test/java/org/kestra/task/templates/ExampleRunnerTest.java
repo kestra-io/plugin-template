@@ -1,4 +1,4 @@
-package io.kestra.task.templates;
+package org.kestra.task.templates;
 
 import io.micronaut.test.annotation.MicronautTest;
 import org.junit.jupiter.api.BeforeEach;

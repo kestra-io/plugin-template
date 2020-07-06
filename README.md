@@ -14,7 +14,7 @@ that you've set up the plugin correctly.
 ## Structure 
 
 ### Tasks
-There only one simple task in this template `io.kestra.task.templates.Example`. 
+There only one simple task in this template `org.kestra.task.templates.Example`. 
 This tasks will take a `format` options (that is an handlebar string) and will return 
 a reverse string in the `RunOutput` vars name `example` mostly to show how to create 
 a task for Kestra. The main logic will be in this task. This also show how to included 

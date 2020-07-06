@@ -25,7 +25,7 @@ repositories {
 }
 
 sourceCompatibility = 11
-group "io.kestra.task.templates"
+group "org.kestra.task.templates"
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"

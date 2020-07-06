@@ -1,4 +1,4 @@
-package io.kestra.task.templates;
+package org.kestra.task.templates;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 @EqualsAndHashCode
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Documentation(
     description = "Short description for this task",
     body = "Full description of this task"

@@ -1,4 +1,4 @@
-package io.kestra.task.templates;
+package org.kestra.task.templates;
 
 import com.google.common.collect.ImmutableMap;
 import io.micronaut.context.ApplicationContext;
