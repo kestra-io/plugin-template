@@ -1,11 +1,11 @@
 package org.kestra.task.templates;
 
 import com.google.common.collect.ImmutableMap;
-import io.micronaut.context.ApplicationContext;
 import io.micronaut.test.annotation.MicronautTest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.kestra.core.runners.RunContext;
+import org.kestra.core.runners.RunContextFactory;
 
 import javax.inject.Inject;
 
@@ -19,14 +19,11 @@ import static org.hamcrest.Matchers.is;
 @MicronautTest
 class ExampleTest {
     @Inject
-    private ApplicationContext applicationContext;
+    private RunContextFactory runContextFactory;
 
     @Test
     void run() throws Exception {
-        RunContext runContext = new RunContext(
-            this.applicationContext,
-            ImmutableMap.of("variable", "John Doe")
-        );
+        RunContext runContext = runContextFactory.of(ImmutableMap.of("variable", "John Doe"));
 
         Example task = Example.builder()
             .format("Hello {{ variable }}")
