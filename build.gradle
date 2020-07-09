@@ -145,6 +145,7 @@ bintray {
         name = project.name
         repo = 'maven'
         publicDownloadNumbers = true
+        licenses = ['Apache-2.0']
         version {
             name = project.version
             released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
