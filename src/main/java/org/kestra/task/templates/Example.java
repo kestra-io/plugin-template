@@ -31,7 +31,7 @@ public class Example extends Task implements RunnableTask<Example.Output> {
 
     @Override
     public Example.Output run(RunContext runContext) throws Exception {
-        Logger logger = runContext.logger(this.getClass());
+        Logger logger = runContext.logger();
 
         String render = runContext.render(format);
         logger.debug(render);
