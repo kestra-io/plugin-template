@@ -67,6 +67,7 @@ dependencies {
     testImplementation "io.micronaut.test:micronaut-test-junit5"
 
     // test deps needed only for to have a runner
+    testImplementation group: "org.kestra", name: "core", version: kestraVersion
     testImplementation group: "org.kestra", name: "repository-memory", version: kestraVersion
     testImplementation group: "org.kestra", name: "runner-memory", version: kestraVersion
     testImplementation group: "org.kestra", name: "storage-local", version: kestraVersion
