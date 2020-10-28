@@ -11,10 +11,12 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.28.0'
 }
 
+def isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
+
 repositories {
     mavenCentral()
     jcenter()
-    maven { url "https://dl.bintray.com/kestra/maven" }
+    maven { url "https://dl.bintray.com/kestra/maven" + (isBuildSnapshot ? "-snapshot" : "") }
 }
 
 sourceCompatibility = 11
@@ -81,6 +83,10 @@ dependencies {
 /**********************************************************************************************************************\
  * Publish
  **********************************************************************************************************************/
+if (isBuildSnapshot) {
+    project.version = project.version.replaceAll(/-SNAPSHOT$/, "")
+}
+
 jar {
     manifest {
         attributes(
@@ -134,10 +140,11 @@ bintray {
     key = System.getenv('BINTRAY_KEY')
     publications = ['BintrayMavenPublication']
     publish = true
+    override = isBuildSnapshot
     pkg {
         userOrg = 'kestra'
         name = project.name
-        repo = 'maven'
+        repo = isBuildSnapshot ? 'maven-snapshot' : 'maven'
         publicDownloadNumbers = true
         licenses = ['Apache-2.0']
         version {
