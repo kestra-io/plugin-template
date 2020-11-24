@@ -1,7 +1,7 @@
 # Kestra Plugin Template
 
 <p align="center">
-  <img width="460" src="https://github.com/kestra-io/kestra/raw/master/ui/src/assets/logo.svg?sanitize=true"  alt="Kestra workflow orchestrator" />
+  <img width="460" src="https://kestra.io/logo.svg"  alt="Kestra workflow orchestrator" />
 </p>
 
 > A template for creating plugin for Kestra
