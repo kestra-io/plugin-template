@@ -12,6 +12,7 @@ plugins {
 }
 
 def isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
+def publishVersion = isBuildSnapshot ? project.version.replaceAll(/-SNAPSHOT$/, "") : project.version;
 
 repositories {
     mavenCentral()
@@ -83,10 +84,6 @@ dependencies {
 /**********************************************************************************************************************\
  * Publish
  **********************************************************************************************************************/
-if (isBuildSnapshot) {
-    project.version = project.version.replaceAll(/-SNAPSHOT$/, "")
-}
-
 jar {
     manifest {
         attributes(
@@ -110,7 +107,7 @@ github {
 publishing {
     publications {
         BintrayMavenPublication(MavenPublication) {
-            version project.version
+            version publishVersion
 
             groupId project.group
             artifactId project.name
@@ -148,9 +145,9 @@ bintray {
         publicDownloadNumbers = true
         licenses = ['Apache-2.0']
         version {
-            name = project.version
+            name = publishVersion
             released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            vcsTag = "v" + project.version
+            vcsTag = "v" + publishVersion
         }
     }
 }
