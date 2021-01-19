@@ -1,7 +1,7 @@
 package org.kestra.task.templates;
 
 import com.google.common.collect.ImmutableMap;
-import io.micronaut.test.annotation.MicronautTest;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.kestra.core.runners.RunContext;
