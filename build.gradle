@@ -161,6 +161,7 @@ release {
     tagCommitMessage = 'tag version'
     newVersionCommitMessage = 'update snapshot version'
     tagTemplate = 'v${version}'
+    buildTasks = ['classes']
 }
 
 /**********************************************************************************************************************\
