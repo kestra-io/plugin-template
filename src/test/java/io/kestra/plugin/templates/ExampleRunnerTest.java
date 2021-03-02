@@ -1,12 +1,12 @@
-package org.kestra.task.templates;
+package io.kestra.plugin.templates;
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kestra.core.models.executions.Execution;
-import org.kestra.core.repositories.LocalFlowRepositoryLoader;
-import org.kestra.core.runners.RunnerUtils;
-import org.kestra.runner.memory.MemoryRunner;
+import io.kestra.core.models.executions.Execution;
+import io.kestra.core.repositories.LocalFlowRepositoryLoader;
+import io.kestra.core.runners.RunnerUtils;
+import io.kestra.runner.memory.MemoryRunner;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -45,7 +45,7 @@ class ExampleRunnerTest {
     @SuppressWarnings("unchecked")
     @Test
     void flow() throws TimeoutException {
-        Execution execution = runnerUtils.runOne("org.kestra.templates", "example");
+        Execution execution = runnerUtils.runOne("io.kestra.templates", "example");
 
         assertThat(execution.getTaskRunList(), hasSize(3));
         assertThat(((Map<String, Object>)execution.getTaskRunList().get(2).getOutputs().get("child")).get("value"), is("task-id"));

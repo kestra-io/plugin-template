@@ -17,7 +17,7 @@
         <appender-ref ref="STDOUT" />
     </root>
 
-    <logger name="org.kestra" level="INFO" />
+    <logger name="io.kestra" level="INFO" />
     <logger name="flow" level="INFO" />
 
 </configuration>

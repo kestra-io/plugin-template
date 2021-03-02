@@ -14,7 +14,7 @@ that you've set up the plugin correctly.
 ## Structure 
 
 ### Tasks
-There only one simple task in this template `org.kestra.task.templates.Example`. 
+There only one simple task in this template `io.kestra.plugin.templates.Example`. 
 This tasks will take a `format` options (that is an handlebar string) and will return 
 a reverse string in the `RunOutput` vars name `example` mostly to show how to create 
 a task for Kestra. The main logic will be in this task. This also show how to included 
@@ -36,7 +36,7 @@ any dependencies. In order to add you dependencies, you will need to add a gradl
 dependencies `implementation` :  
 ```groovy
     // libs
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 ``` 
 The other dependencies (especially `kestra.core` & `micronaut`) is configured to be only `compileOnly` 
 in order to not be exported with plugins.

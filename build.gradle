@@ -3,25 +3,26 @@ plugins {
     id "idea"
     id "com.adarshr.test-logger" version "2.1.1"
     id "com.github.johnrengelman.shadow" version "6.1.0"
-    id "maven-publish"
     id 'ru.vyarus.java-lib' version '2.1.0'
     id 'ru.vyarus.github-info' version '1.2.0'
-    id "com.jfrog.bintray" version "1.8.5"
+    id "io.github.gradle-nexus.publish-plugin" version "1.0.0"
     id "com.github.ben-manes.versions" version "0.36.0"
     id 'net.researchgate.release' version '2.8.1'
 }
 
 def isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
-def publishVersion = isBuildSnapshot ? project.version.replaceAll(/-SNAPSHOT$/, "") : project.version;
 
 repositories {
     mavenCentral()
     jcenter()
-    maven { url "https://dl.bintray.com/kestra/maven" + (isBuildSnapshot ? "-snapshot" : "") }
+    if (isBuildSnapshot) {
+        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+    }
 }
 
 sourceCompatibility = 11
-group "org.kestra.task.templates"
+group "io.kestra.plugins"
+description 'Plugin template for Kestra'
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
@@ -42,7 +43,7 @@ dependencies {
     compileOnly "io.micronaut:micronaut-validation"
 
     // kestra
-    compileOnly group: "org.kestra", name: "core", version: kestraVersion
+    compileOnly group: "io.kestra", name: "core", version: kestraVersion
 
     // libs included in the final jar
     api group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
@@ -72,10 +73,10 @@ dependencies {
     testImplementation "io.micronaut.test:micronaut-test-junit5"
 
     // test deps needed only for to have a runner
-    testImplementation group: "org.kestra", name: "core", version: kestraVersion
-    testImplementation group: "org.kestra", name: "repository-memory", version: kestraVersion
-    testImplementation group: "org.kestra", name: "runner-memory", version: kestraVersion
-    testImplementation group: "org.kestra", name: "storage-local", version: kestraVersion
+    testImplementation group: "io.kestra", name: "core", version: kestraVersion
+    testImplementation group: "io.kestra", name: "repository-memory", version: kestraVersion
+    testImplementation group: "io.kestra", name: "runner-memory", version: kestraVersion
+    testImplementation group: "io.kestra", name: "storage-local", version: kestraVersion
 
     // test
     testImplementation "org.junit.jupiter:junit-jupiter-engine"
@@ -86,13 +87,34 @@ dependencies {
 /**********************************************************************************************************************\
  * Publish
  **********************************************************************************************************************/
+nexusPublishing {
+    repositoryDescription = "${project.group}:${rootProject.name}:${project.version}"
+    useStaging = !isBuildSnapshot
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+}
+
 jar {
     manifest {
         attributes(
                 "X-Kestra-Title": project.name,
-                "X-Kestra-Group": project.group,
+                "X-Kestra-Group": project.group + ".templates",
+                "X-Kestra-Description": project.description,
                 "X-Kestra-Version": project.version
         )
+    }
+}
+
+pom {
+    developers {
+        developer {
+            id "tchiotludo"
+            name "Ludovic Dehon"
+        }
     }
 }
 
@@ -104,54 +126,6 @@ shadowJar {
 github {
     user 'kestra-io'
     license 'Apache'
-}
-
-publishing {
-    publications {
-        BintrayMavenPublication(MavenPublication) {
-            version publishVersion
-
-            groupId project.group
-            artifactId project.name
-
-            artifact shadowJar
-            artifact sourcesJar
-            artifact javadocJar
-
-            pom.withXml {
-                def dependenciesNode = asNode().getAt('dependencies')[0] ?: asNode().appendNode('dependencies')
-
-                configurations.api.allDependencies.each {
-                    if (it.name != 'unspecified') {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
-                }
-            }
-        }
-    }
-}
-
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['BintrayMavenPublication']
-    publish = true
-    override = isBuildSnapshot
-    pkg {
-        userOrg = 'kestra'
-        name = project.name
-        repo = isBuildSnapshot ? 'maven-snapshot' : 'maven'
-        publicDownloadNumbers = true
-        licenses = ['Apache-2.0']
-        version {
-            name = publishVersion
-            released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            vcsTag = "v" + publishVersion
-        }
-    }
 }
 
 /**********************************************************************************************************************\

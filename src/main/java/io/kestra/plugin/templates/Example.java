@@ -1,13 +1,13 @@
-package org.kestra.task.templates;
+package io.kestra.plugin.templates;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.StringUtils;
-import org.kestra.core.models.annotations.PluginProperty;
-import org.kestra.core.models.tasks.RunnableTask;
-import org.kestra.core.models.tasks.Task;
-import org.kestra.core.runners.RunContext;
+import io.kestra.core.models.annotations.PluginProperty;
+import io.kestra.core.models.tasks.RunnableTask;
+import io.kestra.core.models.tasks.Task;
+import io.kestra.core.runners.RunContext;
 import org.slf4j.Logger;
 
 @SuperBuilder
@@ -45,7 +45,7 @@ public class Example extends Task implements RunnableTask<Example.Output> {
      */
     @Builder
     @Getter
-    public static class Output implements org.kestra.core.models.tasks.Output {
+    public static class Output implements io.kestra.core.models.tasks.Output {
         @Schema(
             title = "Short description for this output",
             description = "Full description of this output"
@@ -55,7 +55,7 @@ public class Example extends Task implements RunnableTask<Example.Output> {
 
     @Builder
     @Getter
-    public static class OutputChild implements org.kestra.core.models.tasks.Output {
+    public static class OutputChild implements io.kestra.core.models.tasks.Output {
         @Schema(
             title = "Short description for this output",
             description = "Full description of this output"

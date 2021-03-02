@@ -1,11 +1,11 @@
-package org.kestra.task.templates;
+package io.kestra.plugin.templates;
 
 import com.google.common.collect.ImmutableMap;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
-import org.kestra.core.runners.RunContext;
-import org.kestra.core.runners.RunContextFactory;
+import io.kestra.core.runners.RunContext;
+import io.kestra.core.runners.RunContextFactory;
 
 import javax.inject.Inject;
 
