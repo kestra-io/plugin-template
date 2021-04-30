@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 @EqualsAndHashCode
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Schema(
     title = "Short description for this task",
     description = "Full description of this task"
