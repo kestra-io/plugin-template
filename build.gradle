@@ -20,7 +20,7 @@ repositories {
 }
 
 sourceCompatibility = 11
-group "io.kestra.plugins"
+group "io.kestra.plugin"
 description 'Plugin template for Kestra'
 
 tasks.withType(JavaCompile) {
