@@ -142,6 +142,9 @@ release {
     newVersionCommitMessage = 'update snapshot version'
     tagTemplate = 'v${version}'
     buildTasks = ['classes']
+    git {
+        requireBranch.set('master')
+    }
 }
 
 /**********************************************************************************************************************\
