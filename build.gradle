@@ -4,11 +4,11 @@ plugins {
     id "com.adarshr.test-logger" version "3.2.0"
     id "com.github.johnrengelman.shadow" version "7.1.2"
     id 'ru.vyarus.java-lib' version '2.1.0'
-    id 'ru.vyarus.github-info' version '1.3.0'
+    id 'ru.vyarus.github-info' version '1.4.0'
     id 'signing'
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
-    id "com.github.ben-manes.versions" version "0.42.0"
-    id 'net.researchgate.release' version '3.0.1'
+    id "com.github.ben-manes.versions" version "0.44.0"
+    id 'net.researchgate.release' version '3.0.2'
 }
 
 def isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
@@ -21,12 +21,20 @@ repositories {
 }
 
 sourceCompatibility = 11
+targetCompatibility = 11
+
 group "io.kestra.plugin"
 description 'Plugin template for Kestra'
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("org.slf4j:slf4j-api:1.7.36")
+    }
 }
 
 dependencies {
@@ -46,7 +54,7 @@ dependencies {
     compileOnly group: "io.kestra", name: "core", version: kestraVersion
 
     // libs included in the final jar
-    api group: 'com.google.code.gson', name: 'gson', version: '2.9.1'
+    api group: 'com.google.code.gson', name: 'gson', version: '2.10'
 }
 
 
