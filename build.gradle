@@ -2,11 +2,11 @@ plugins {
     id 'java-library'
     id "idea"
     id "com.adarshr.test-logger" version "3.2.0"
-    id "com.github.johnrengelman.shadow" version "7.1.2"
-    id 'ru.vyarus.java-lib' version '2.1.0'
+    id "com.github.johnrengelman.shadow" version "8.1.0"
+    id 'ru.vyarus.java-lib' version '2.4.0'
     id 'ru.vyarus.github-info' version '1.5.0'
     id 'signing'
-    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+    id "io.github.gradle-nexus.publish-plugin" version "1.3.0"
     id "com.github.ben-manes.versions" version "0.46.0"
     id 'net.researchgate.release' version '3.0.2'
 }
@@ -124,10 +124,6 @@ pom {
             name "Ludovic Dehon"
         }
     }
-}
-
-signing {
-    sign publishing.publications.maven
 }
 
 shadowJar {
