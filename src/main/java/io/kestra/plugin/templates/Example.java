@@ -23,14 +23,8 @@ import org.slf4j.Logger;
 @Plugin(
     examples = {
         @io.kestra.core.models.annotations.Example(
-            full = true,
             title = "Simple revert",
-            code = """
-                tasks:
-                  - id: revert
-                    type: io.kestra.plugin.templates.Example
-                    format: "Text to be reverted"
-            """
+            code = { "format: \"Text to be reverted\"" }
         )
     }
 )
