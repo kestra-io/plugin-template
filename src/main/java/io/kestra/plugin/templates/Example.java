@@ -1,5 +1,6 @@
 package io.kestra.plugin.templates;
 
+import io.kestra.core.models.annotations.Plugin;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -18,6 +19,14 @@ import org.slf4j.Logger;
 @Schema(
     title = "Short description for this task",
     description = "Full description of this task"
+)
+@Plugin(
+    examples = {
+        @io.kestra.core.models.annotations.Example(
+            title = "Simple revert",
+            code = { "format: \"Text to be reverted\"" }
+        )
+    }
 )
 public class Example extends Task implements RunnableTask<Example.Output> {
     @Schema(
@@ -40,7 +49,7 @@ public class Example extends Task implements RunnableTask<Example.Output> {
     }
 
     /**
-     * Input or Output can nested as you need
+     * Input or Output can be nested as you need
      */
     @Builder
     @Getter
