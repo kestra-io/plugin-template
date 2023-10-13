@@ -45,7 +45,7 @@ class ExampleRunnerTest {
     @SuppressWarnings("unchecked")
     @Test
     void flow() throws TimeoutException {
-        Execution execution = runnerUtils.runOne("io.kestra.templates", "example");
+        Execution execution = runnerUtils.runOne(null, "io.kestra.templates", "example");
 
         assertThat(execution.getTaskRunList(), hasSize(3));
         assertThat(((Map<String, Object>)execution.getTaskRunList().get(2).getOutputs().get("child")).get("value"), is("task-id"));
