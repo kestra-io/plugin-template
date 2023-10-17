@@ -35,16 +35,22 @@
 
 # Kestra Plugin Template
 
-> A template for creating plugin for Kestra
+> A template for creating Kestra plugins
 
-This repository is meant to serve as a general template for how to set up new plugin for 
-[Kestra](https://github.com/kestra-io/kestra). In general, setting up a new plugin should 
-take only a few minutes; use this repository as a way of finding example files to ensure 
-that you've set up the plugin correctly.
+This repository serves as a general template for creating a new [Kestra](https://github.com/kestra-io/kestra) plugin. It should take only a few minutes! Use this repository as a scaffold to ensure that you've set up the plugin correctly, including unit tests and CI/CD workflows.
+
 
 ## Documentation
-* The official Kestra documentation can be found under: [kestra.io](https://kestra.io)
-* The official documentation for developing a plugin can be found [here](https://kestra.io/docs/plugin-developer-guide/)
+* Full documentation can be found under: [kestra.io/docs](https://kestra.io/docs)
+* Documentation for developing a plugin is included in the [Plugin Developer Guide](https://kestra.io/docs/plugin-developer-guide/)
+
 
 ## License
 Apache 2.0 © [Kestra Technologies](https://kestra.io)
+
+
+## Stay up to date
+
+We release new versions every month. Give the repository a star to stay up to date with the latest releases and get notified about future updates.
+
+![Star the repo](https://kestra.io/star.gif)
