@@ -51,6 +51,6 @@ Apache 2.0 © [Kestra Technologies](https://kestra.io)
 
 ## Stay up to date
 
-We release new versions every month. Give the repository a star to stay up to date with the latest releases and get notified about future updates.
+We release new versions every month. Give the [main repository](https://github.com/kestra-io/kestra) a star to stay up to date with the latest releases and get notified about future updates.
 
 ![Star the repo](https://kestra.io/star.gif)
