@@ -33,7 +33,7 @@ tasks.withType(JavaCompile) {
 
 configurations.all {
     resolutionStrategy {
-        force("org.slf4j:slf4j-api:1.7.36")
+        force("org.slf4j:slf4j-api:2.0.10")
     }
 }
 
