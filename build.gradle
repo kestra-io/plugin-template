@@ -14,6 +14,7 @@ plugins {
 def isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
 
 repositories {
+    mavenLocal()
     mavenCentral()
     if (isBuildSnapshot) {
         maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
@@ -31,24 +32,20 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add("-parameters")
 }
 
-configurations.all {
-    resolutionStrategy {
-        force("org.slf4j:slf4j-api:1.7.36")
-    }
-}
-
 dependencies {
     // lombok
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     compileOnly "org.projectlombok:lombok:$lombokVersion"
 
     // micronaut
-    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    annotationProcessor platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
     annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut:micronaut-validation"
-    compileOnly platform("io.micronaut:micronaut-bom:$micronautVersion")
+    annotationProcessor "io.micronaut.validation:micronaut-validation-processor"
+
+    compileOnly platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
     compileOnly "io.micronaut:micronaut-inject"
-    compileOnly "io.micronaut:micronaut-validation"
+    compileOnly "io.micronaut.validation:micronaut-validation"
+    compileOnly "io.micronaut:micronaut-jackson-databind"
 
     // kestra
     compileOnly group: "io.kestra", name: "core", version: kestraVersion
@@ -75,9 +72,16 @@ testlogger {
 }
 
 dependencies {
-    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    // lombok
+    testAnnotationProcessor "org.projectlombok:lombok:" + lombokVersion
+    testCompileOnly 'org.projectlombok:lombok:' + lombokVersion
+
+    // micronaut
+    testAnnotationProcessor platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
-    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testAnnotationProcessor "io.micronaut.validation:micronaut-validation-processor"
+
+    testImplementation platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
     testImplementation "io.micronaut.test:micronaut-test-junit5"
 
     // test deps needed only for to have a runner
