@@ -45,6 +45,8 @@ dependencies {
     compileOnly platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
     compileOnly "io.micronaut:micronaut-inject"
     compileOnly "io.micronaut.validation:micronaut-validation"
+    // uncomment if the plugin uses reactive types
+    // compileOnly "io.micronaut.reactor:micronaut-reactor"
     compileOnly "io.micronaut:micronaut-jackson-databind"
 
     // kestra
