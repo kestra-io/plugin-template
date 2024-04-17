@@ -47,6 +47,10 @@ This repository serves as a general template for creating a new [Kestra](https:/
 * Documentation for developing a plugin is included in the [Plugin Developer Guide](https://kestra.io/docs/plugin-developer-guide/)
 
 
+## Quickstart
+To build and run on docker Kestra with your custom plugin, run this command:
+`./gradlew shadowJar && docker build -t kestra-custom . && docker run --rm -p 8080:8080 kestra-custom server local`
+
 ## License
 Apache 2.0 © [Kestra Technologies](https://kestra.io)
 
