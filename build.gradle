@@ -21,8 +21,8 @@ repositories {
     }
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
+sourceCompatibility = 21
+targetCompatibility = 21
 
 group "io.kestra.plugin"
 description 'Plugin template for Kestra'
@@ -37,20 +37,12 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     compileOnly "org.projectlombok:lombok:$lombokVersion"
 
-    // micronaut
-    annotationProcessor platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
-    annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut.validation:micronaut-validation-processor"
-
-    compileOnly platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
-    compileOnly "io.micronaut:micronaut-inject"
-    compileOnly "io.micronaut.validation:micronaut-validation"
-    // uncomment if the plugin uses reactive types
-    // compileOnly "io.micronaut.reactor:micronaut-reactor"
-    compileOnly "io.micronaut:micronaut-jackson-databind"
-
-    // kestra
+    // Kestra
     compileOnly group: "io.kestra", name: "core", version: kestraVersion
+    annotationProcessor group: "io.kestra", name: "processor", version: kestraVersion
+
+    // Logs
+    compileOnly'org.slf4j:slf4j-api:2.0.13'
 
     // libs included in the final jar
     api group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -85,6 +77,9 @@ dependencies {
 
     testImplementation platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
     testImplementation "io.micronaut.test:micronaut-test-junit5"
+
+    // Kestra
+    testAnnotationProcessor group: "io.kestra", name: "processor", version: kestraVersion
 
     // test deps needed only for to have a runner
     testImplementation group: "io.kestra", name: "core", version: kestraVersion
