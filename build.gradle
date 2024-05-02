@@ -3,7 +3,7 @@ plugins {
     id "idea"
     id "com.adarshr.test-logger" version "4.0.0"
     id "com.github.johnrengelman.shadow" version "8.1.1"
-    id 'ru.vyarus.java-lib' version '2.4.0'
+    id 'ru.vyarus.java-lib' version '3.0.0'
     id 'ru.vyarus.github-info' version '2.0.0'
     id 'signing'
     id "io.github.gradle-nexus.publish-plugin" version "2.0.0"
@@ -119,11 +119,11 @@ jar {
     }
 }
 
-pom {
+maven.pom {
     developers {
         developer {
-            id "tchiotludo"
-            name "Ludovic Dehon"
+            id = "tchiotludo"
+            name = "Ludovic Dehon"
         }
     }
 }
