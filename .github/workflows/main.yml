@@ -11,7 +11,13 @@ on:
     branches:
       - master
 
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      skip-test:
+        description: 'Skip test'
+        required: false
+        type: string
+        default: "false"
 
 jobs:
   check:
@@ -45,6 +51,7 @@ jobs:
 
       # Gradle check
       - name: Build with Gradle
+        if: ${{ github.event.inputs.skip-test == 'false' || github.event.inputs.skip-test == '' }}
         run: ./gradlew check
 
       # Publish
