@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
     steps:
       - uses: actions/checkout@v4
 
@@ -53,6 +54,31 @@ jobs:
       - name: Build with Gradle
         if: ${{ github.event.inputs.skip-test == 'false' || github.event.inputs.skip-test == '' }}
         run: ./gradlew check
+
+      # Allure check
+      - name: Auth to Google Cloud
+        id: auth
+        if: ${{ always() && env.GOOGLE_SERVICE_ACCOUNT != 0 }}
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT }}'
+
+      - uses: rlespinasse/github-slug-action@v4
+
+      - name: Publish allure report
+        uses: andrcuns/allure-publish-action@v2.6.0
+        if: ${{ always() && env.GOOGLE_SERVICE_ACCOUNT != 0 && (github.event.inputs.skip-test == 'false' || github.event.inputs.skip-test == '') }}
+        env:
+          GITHUB_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JAVA_HOME: /usr/lib/jvm/default-jvm/
+        with:
+          storageType: gcs
+          resultsGlob: build/allure-results
+          bucket: internal-kestra-host
+          baseUrl: "https://internal.kestra.io"
+          prefix: ${{ format('{0}/{1}/{2}', github.repository, env.GITHUB_HEAD_REF_SLUG != '' && env.GITHUB_HEAD_REF_SLUG || github.ref_name, 'allure/java') }}
+          copyLatest: true
+          ignoreMissingResults: true
 
       # Publish
       - name: Publish package to Sonatype
