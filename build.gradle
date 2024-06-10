@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id "idea"
+    id 'jacoco'
     id "com.adarshr.test-logger" version "4.0.0"
     id "com.github.johnrengelman.shadow" version "8.1.1"
     id 'ru.vyarus.java-lib' version '3.0.0'
@@ -117,6 +118,17 @@ dependencies {
 
 test {
     jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
+}
+
+/**********************************************************************************************************************\
+ * Jacoco
+ **********************************************************************************************************************/
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
 }
 
 /**********************************************************************************************************************\
