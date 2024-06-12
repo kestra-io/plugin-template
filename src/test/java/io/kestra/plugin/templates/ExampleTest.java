@@ -1,7 +1,7 @@
 package io.kestra.plugin.templates;
 
 import com.google.common.collect.ImmutableMap;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.kestra.core.junit.annotations.KestraTest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import io.kestra.core.runners.RunContext;
@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.is;
  * This test will only test the main task, this allow you to send any input
  * parameters to your task and test the returning behaviour easily.
  */
-@MicronautTest
+@KestraTest
 class ExampleTest {
     @Inject
     private RunContextFactory runContextFactory;
