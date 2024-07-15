@@ -102,7 +102,7 @@ dependencies {
  * Allure Reports
  **********************************************************************************************************************/
 dependencies {
-    testImplementation platform("io.qameta.allure:allure-bom:2.27.0")
+    testImplementation platform("io.qameta.allure:allure-bom:2.28.0")
     testImplementation "io.qameta.allure:allure-junit5"
 }
 
