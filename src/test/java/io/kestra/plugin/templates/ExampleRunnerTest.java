@@ -1,6 +1,7 @@
 package io.kestra.plugin.templates;
 
 import io.kestra.core.junit.annotations.KestraTest;
+import io.kestra.core.queues.QueueException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import io.kestra.core.models.executions.Execution;
@@ -44,7 +45,7 @@ class ExampleRunnerTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    void flow() throws TimeoutException {
+    void flow() throws TimeoutException, QueueException {
         Execution execution = runnerUtils.runOne(null, "io.kestra.templates", "example");
 
         assertThat(execution.getTaskRunList(), hasSize(3));
