@@ -43,16 +43,10 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok"
     compileOnly "org.projectlombok:lombok"
 
-    // Kestra
-    annotationProcessor "io.kestra:processor"
-    compileOnly "io.kestra:core"
-
-    // Logs
-    compileOnly "org.slf4j:slf4j-api"
-
-    // libs included in the final jar
-    // TODO remove it after using the GitHub template as your plugin may not need it
-    api "com.google.code.gson:gson:2.11.0"
+    // kestra
+    annotationProcessor group: "io.kestra", name: "processor", version: kestraVersion
+    compileOnly group: "io.kestra", name: "core", version: kestraVersion
+    compileOnly group: "io.kestra", name: "script", version: kestraVersion
 }
 
 
@@ -79,7 +73,7 @@ dependencies {
 
     // lombok
     testAnnotationProcessor "org.projectlombok:lombok"
-    testCompileOnly "org.projectlombok:lombok"
+    testCompileOnly 'org.projectlombok:lombok'
 
     // micronaut
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
@@ -87,14 +81,14 @@ dependencies {
     testImplementation "io.micronaut.test:micronaut-test-junit5"
     testImplementation "io.micronaut:micronaut-jackson-databind"
 
-    // Kestra
-    testAnnotationProcessor "io.kestra:processor"
-    testImplementation "io.kestra:core"
-    testImplementation "io.kestra:tests"
-    // Kestra deps needed only to have a runner for unit tests
-    testImplementation "io.kestra:repository-memory"
-    testImplementation "io.kestra:runner-memory"
-    testImplementation "io.kestra:storage-local"
+    // test deps needed only for to have a runner
+    testAnnotationProcessor group: "io.kestra", name: "processor", version: kestraVersion
+    testImplementation group: "io.kestra", name: "core", version: kestraVersion
+    testImplementation group: "io.kestra", name: "tests", version: kestraVersion
+    testImplementation group: "io.kestra", name: "script", version: kestraVersion
+    testImplementation group: "io.kestra", name: "repository-memory", version: kestraVersion
+    testImplementation group: "io.kestra", name: "runner-memory", version: kestraVersion
+    testImplementation group: "io.kestra", name: "storage-local", version: kestraVersion
 
     // test
     testImplementation "org.junit.jupiter:junit-jupiter-engine"
