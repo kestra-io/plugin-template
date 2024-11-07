@@ -1,8 +1,10 @@
 package io.kestra.plugin.templates;
 
+import io.kestra.core.exceptions.IllegalVariableEvaluationException;
 import io.kestra.core.models.annotations.Plugin;
 import io.kestra.core.models.conditions.ConditionContext;
 import io.kestra.core.models.executions.Execution;
+import io.kestra.core.models.property.Property;
 import io.kestra.core.models.triggers.*;
 import io.kestra.core.runners.RunContext;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,16 +28,17 @@ public class Trigger extends AbstractTrigger implements PollingTriggerInterface,
     @Builder.Default
     private final Duration interval = Duration.ofSeconds(60);
 
-    protected Double min = 0.5;
+    protected Property<Double> min = Property.of(0.5);
 
     @Override
-    public Optional<Execution> evaluate(ConditionContext conditionContext, TriggerContext context) {
+    public Optional<Execution> evaluate(ConditionContext conditionContext, TriggerContext context) throws IllegalVariableEvaluationException {
+        RunContext runContext = conditionContext.getRunContext();
+
         double random = Math.random();
-        if (random < this.min) {
+        if (random < runContext.render(this.min).as(Double.class).orElseThrow()) {
             return Optional.empty();
         }
 
-        RunContext runContext = conditionContext.getRunContext();
         runContext.logger().info("Will create an execution");
         Execution execution = TriggerService.generateExecution(
             this,
