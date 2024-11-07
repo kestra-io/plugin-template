@@ -1,13 +1,15 @@
 package io.kestra.plugin.templates;
 
-import com.google.common.collect.ImmutableMap;
 import io.kestra.core.junit.annotations.KestraTest;
+import io.kestra.core.models.property.Property;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import io.kestra.core.runners.RunContext;
 import io.kestra.core.runners.RunContextFactory;
 
 import jakarta.inject.Inject;
+
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -23,10 +25,10 @@ class ExampleTest {
 
     @Test
     void run() throws Exception {
-        RunContext runContext = runContextFactory.of(ImmutableMap.of("variable", "John Doe"));
+        RunContext runContext = runContextFactory.of(Map.of("variable", "John Doe"));
 
         Example task = Example.builder()
-            .format("Hello {{ variable }}")
+            .format(new Property<>("Hello {{ variable }}"))
             .build();
 
         Example.Output runOutput = task.run(runContext);
