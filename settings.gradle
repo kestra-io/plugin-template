@@ -1,1 +1,6 @@
-rootProject.name = 'plugin-template'
+rootProject.name = 'plugin-langchain'
+include 'plugin-langchain4j'
+include 'plugin-langchain4j-openai'
+include 'plugin-langchain4j-gemini'
+include 'plugin-langchain4j-ollama'
+

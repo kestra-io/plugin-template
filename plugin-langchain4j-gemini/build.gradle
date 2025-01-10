@@ -1,0 +1,20 @@
+project.description = 'Use the Google Gemini models.'
+
+jar {
+    manifest {
+        attributes(
+            "X-Kestra-Name": project.name,
+            "X-Kestra-Title": "Gemini",
+            "X-Kestra-Group": project.group + ".jdbc.gemini",
+            "X-Kestra-Description": project.description,
+            "X-Kestra-Version": project.version
+        )
+    }
+}
+
+dependencies {
+    implementation 'dev.langchain4j:langchain4j-google-ai-gemini:1.0.0-alpha1'
+    implementation project(':plugin-langchain4j')
+
+    testImplementation project(':plugin-langchain4j').sourceSets.test.output
+}

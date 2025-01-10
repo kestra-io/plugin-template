@@ -1,0 +1,13 @@
+project.description = 'Abstract LangChain4j plugin for Kestra'
+
+jar {
+    manifest {
+        attributes(
+            "X-Kestra-Name": project.name,
+            "X-Kestra-Title": "Abstract LangChain4j",
+            "X-Kestra-Group": project.group + ".langchain4j",
+            "X-Kestra-Description": project.description,
+            "X-Kestra-Version": project.version
+        )
+    }
+}

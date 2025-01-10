@@ -1,0 +1,20 @@
+project.description = 'Use the OpenAi models.'
+
+jar {
+    manifest {
+        attributes(
+            "X-Kestra-Name": project.name,
+            "X-Kestra-Title": "OpenAI",
+            "X-Kestra-Group": project.group + ".jdbc.openai",
+            "X-Kestra-Description": project.description,
+            "X-Kestra-Version": project.version
+        )
+    }
+}
+
+dependencies {
+    implementation 'dev.langchain4j:langchain4j-open-ai:1.0.0-alpha1'
+    implementation project(':plugin-langchain4j')
+
+    testImplementation project(':plugin-langchain4j').sourceSets.test.output
+}
