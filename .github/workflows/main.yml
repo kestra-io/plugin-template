@@ -66,7 +66,7 @@ jobs:
       - uses: rlespinasse/github-slug-action@v5
 
       - name: Publish allure report
-        uses: andrcuns/allure-publish-action@v2.8.0
+        uses: andrcuns/allure-publish-action@v2.9.0
         if: ${{ always() && env.GOOGLE_SERVICE_ACCOUNT != 0 && (github.event.inputs.skip-test == 'false' || github.event.inputs.skip-test == '') }}
         env:
           GITHUB_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
           storageType: gcs
           resultsGlob: build/allure-results
           bucket: internal-kestra-host
-          baseUrl: "https://internal.kestra.io"
+          baseUrl: "https://internal.dev.kestra.io"
           prefix: ${{ format('{0}/{1}', github.repository, 'allure/java') }}
           copyLatest: true
           ignoreMissingResults: true
