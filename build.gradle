@@ -18,7 +18,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     if (isBuildSnapshot) {
-        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url = "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
     }
 }
 
@@ -29,8 +29,8 @@ java {
     targetCompatibility = targetJavaVersion
 }
 
-group "io.kestra.plugin"
-description 'Plugin template for Kestra'
+group = "io.kestra.plugin"
+description = 'Plugin template for Kestra'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
@@ -62,12 +62,12 @@ test {
 }
 
 testlogger {
-    theme "mocha-parallel"
-    showExceptions true
-    showFullStackTraces true
-    showStandardStreams true
-    showPassedStandardStreams false
-    showSkippedStandardStreams true
+    theme = "mocha-parallel"
+    showExceptions = true
+    showFullStackTraces = true
+    showStandardStreams = true
+    showPassedStandardStreams = false
+    showSkippedStandardStreams = true
 }
 
 dependencies {
@@ -180,8 +180,8 @@ shadowJar {
 }
 
 github {
-    user 'kestra-io'
-    license 'Apache'
+    user = 'kestra-io'
+    license = 'Apache'
 }
 
 /**********************************************************************************************************************\
