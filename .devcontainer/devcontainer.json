@@ -18,7 +18,7 @@
         "editor.tabSize": 4,
         "editor.formatOnSave": true,
         "files.insertFinalNewline": true,
-        "editor.defaultFormatter": "Oracle.oracle-java",
+        "editor.defaultFormatter": "redhat.java",
         "telemetry.telemetryLevel": "off",
         "editor.bracketPairColorization.enabled": true,
         "editor.guides.bracketPairs": "active"
