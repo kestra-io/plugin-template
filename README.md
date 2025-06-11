@@ -51,7 +51,14 @@ This repository serves as a general template for creating a new [Kestra](https:/
 ./gradlew check --parallel
 ```
 
-### Launching the whole app
+### Development
+
+`VSCode`:
+
+Follow the README.md within the `.devcontainer` folder for a quick and easy way to get up and running with developing plugins if you are using VSCode.
+
+`Other IDEs`:
+
 ```
 ./gradlew shadowJar && docker build -t kestra-custom . && docker run --rm -p 8080:8080 kestra-custom server local
 ```
