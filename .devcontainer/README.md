@@ -37,6 +37,12 @@ The resulting JAR file will be generated in the `build/libs` directory and shoul
 
 You can now navigate to http://localhost:8080 and start using your custom plugin.
 
+`Tests`:
+
+```bash
+$ ./gradlew check --parallel
+```
+
 ---
 
 ### GIT
