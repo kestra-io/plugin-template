@@ -4,12 +4,10 @@ plugins {
     id 'jacoco'
     id "com.adarshr.test-logger" version "4.0.0"
     id "com.gradleup.shadow" version "8.3.6"
-    id 'ru.vyarus.java-lib' version '3.0.0'
-    id 'ru.vyarus.github-info' version '2.0.0'
     id 'signing'
-    id "io.github.gradle-nexus.publish-plugin" version "2.0.0"
     id "com.github.ben-manes.versions" version "0.52.0"
     id 'net.researchgate.release' version '3.1.0'
+    id "com.vanniktech.maven.publish" version "0.33.0"
 }
 
 def isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
@@ -18,7 +16,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     if (isBuildSnapshot) {
-        maven { url = "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://central.sonatype.com/repository/maven-snapshots/" }
     }
 }
 
@@ -137,13 +135,30 @@ jacocoTestReport {
 /**********************************************************************************************************************\
  * Publish
  **********************************************************************************************************************/
-nexusPublishing {
-    repositoryDescription = "${project.group}:${rootProject.name}:${project.version}"
-    useStaging = !isBuildSnapshot
-    repositories {
-        sonatype {
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+mavenPublishing {
+    publishToMavenCentral(true)
+    signAllPublications()
+    coordinates("${project.group}", "${project.name}", "${project.version}")
+    pom {
+        name = "${project.name}"
+        description = "${project.group}:${project.name}:${project.version}"
+        url = "https://github.com/kestra-io/${project.name}"
+        licenses {
+            license {
+                name = 'The Apache License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+        }
+        developers {
+            developer {
+                id = 'tchiotludo'
+                name = 'Dehon'
+                email = 'ldehon@kestra.io'
+            }
+        }
+        scm {
+            connection = 'scm:git:'
+            url = "https://github.com/kestra-io/${project.name}"
         }
     }
 }
@@ -165,23 +180,9 @@ jar {
     }
 }
 
-maven.pom {
-    developers {
-        developer {
-            id = "tchiotludo"
-            name = "Ludovic Dehon"
-        }
-    }
-}
-
 shadowJar {
     archiveClassifier.set(null)
     mergeServiceFiles()
-}
-
-github {
-    user = 'kestra-io'
-    license = 'Apache'
 }
 
 /**********************************************************************************************************************\
