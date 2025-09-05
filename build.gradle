@@ -40,7 +40,6 @@ dependencies {
     // Platform
     annotationProcessor enforcedPlatform("io.kestra:platform:$kestraVersion")
     implementation enforcedPlatform("io.kestra:platform:$kestraVersion")
-    api enforcedPlatform("io.kestra:platform:$kestraVersion")
 
     // lombok
     annotationProcessor "org.projectlombok:lombok"
