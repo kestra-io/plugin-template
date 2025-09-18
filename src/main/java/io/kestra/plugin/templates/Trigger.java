@@ -28,7 +28,8 @@ public class Trigger extends AbstractTrigger implements PollingTriggerInterface,
     @Builder.Default
     private final Duration interval = Duration.ofSeconds(60);
 
-    protected Property<Double> min = Property.of(0.5);
+    @Builder.Default
+    protected Property<Double> min = Property.ofValue(0.5);
 
     @Override
     public Optional<Execution> evaluate(ConditionContext conditionContext, TriggerContext context) throws IllegalVariableEvaluationException {
