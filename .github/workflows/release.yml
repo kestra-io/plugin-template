@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       releaseVersion:
-        description: "Release version (e.g. 1.2.0)"
+        description: "Release version (e.g. 1.1.2)"
         required: true
       nextVersion:
-        description: "Next version (e.g. 1.3.0-SNAPSHOT)"
-        required: true
+        description: "Next version (e.g. 1.2.0-SNAPSHOT) - optional for patch release"
+        required: false
 
 jobs:
   release:
@@ -44,4 +44,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod +x .github/scripts/release.sh
-          .github/scripts/release.sh "${{ github.event.inputs.releaseVersion }}" "${{ github.event.inputs.nextVersion }}"
+          .github/scripts/release.sh "${{ github.event.inputs.releaseVersion }}" "${{ github.event.inputs.nextVersion || '' }}"
