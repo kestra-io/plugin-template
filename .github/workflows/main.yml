@@ -37,7 +37,7 @@ jobs:
           script: |
             const org = "kestra-io";
             const username = context.payload.pull_request.user.login;
-            
+
             try {
               await github.rest.orgs.checkMembershipForUser({ org, username });
               core.info(`User ${username} is a member of ${org}, skipping checklist validation.`);
@@ -47,7 +47,7 @@ jobs:
             }
 
             const body = context.payload.pull_request.body || "";
-            const unchecked = body.match(/- \[ \]/g);
+            const unchecked = body.match(/- +\[ +\]/g);
             if (unchecked) {
               core.setFailed("Some checklist items are still unchecked. Please complete them.");
             } else {

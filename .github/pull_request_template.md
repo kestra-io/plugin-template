@@ -39,23 +39,22 @@ Thank you for your contribution. ❤️  -->
 ### Contributor Checklist ✅
 
 - [ ] PR Title and commits follows [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
-- [ ] Unit Tests added or updated to cover the change (using the `RunContext` to actually run tasks).
+- [ ] Add a `closes #ISSUE_ID` or `fixes #ISSUE_ID` in the description if the PR relates to an opened issue.
 - [ ] Documentation updated (plugin docs from `@Schema` for properties and outputs, `@Plugin` with examples, `README.md` file with basic knowledge and specifics).
 - [ ] Setup instructions included if needed (API keys, accounts, etc.).
 - [ ] Prefix all rendered properties by `r` not `rendered` (eg: `rHost`).
-- [ ] Add sanity checks if possible with a YAML flow inside `src/test/resources/flows`.
 - [ ] Use `runContext.logger()` to log enough important infos where it's needed and with the best level (DEBUG, INFO, WARN or ERROR).
-- [ ] If you are serializing response from an external API, you may have to add a `@JsonIgnoreProperties(ignoreUnknown = true)` at the mapped class level. So that we will avoid to crash the plugin if the provider add a new field suddenly.
 
 ⚙️ **Properties**
 - [ ] Properties are declared with `Property<T>` carrier type, do **not** use `@PluginProperty`.
 - [ ] Mandatory properties must be annotated with `@NotNull` and checked during the rendering.
--  You can model a JSON thanks to a simple `Property<Map<String, Object>>`.
+- [ ] You can model a JSON thanks to a simple `Property<Map<String, Object>>`.
 
 🌐 **HTTP**
 - [ ] Must use Kestra’s internal HTTP client from `io.kestra.core.http.client`
 
 📦 **JSON**
+- [ ] If you are serializing response from an external API, you may have to add a `@JsonIgnoreProperties(ignoreUnknown = true)` at the mapped class level. So that we will avoid to crash the plugin if the provider add a new field suddenly.
 - [ ] Must use Jackson mappers provided by core (`io.kestra.core.serializers`)
 
 ✨ **New plugins / subplugins**
@@ -71,6 +70,8 @@ Thank you for your contribution. ❤️  -->
 - [ ] Align the `"""` to close examples blocks with the flow id.
 
 🧪 **Tests**
+- [ ] Unit Tests added or updated to cover the change (using the `RunContext` to actually run tasks).
+- [ ] Add sanity checks if possible with a YAML flow inside `src/test/resources/flows`.
 - [ ] Avoid disabling tests for CI. Instead, configure a local environment whenever it's possible with `.github/setup-unit.sh` (which can be executed locally and in the CI) all along with a new `docker-compose-ci.yml` file (do **not** edit the existing `docker-compose.yml`).
 - [ ] Provide screenshots from your QA / tests locally in the PR description. The goal here is to use the JAR of the plugin and directly test it locally in Kestra UI to ensure it integrates well.
 
