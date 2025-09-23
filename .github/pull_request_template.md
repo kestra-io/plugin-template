@@ -53,6 +53,7 @@ Thank you for your contribution. ❤️  -->
 - [ ] Must use Jackson mappers provided by core (`io.kestra.core.serializers`)
 
 ✨ **New plugins / subplugins**
+- [ ] If you are fetching data (one, many or too many), you must add a `Property<FetchType> fetchType` to be able to use `FETCH_ONE`, `FETCH` and even `STORE` to store big amount of data in the internal storage.
 - [ ] Add a `package-info.java` under each sub package respecting [this format](https://github.com/kestra-io/plugin-odoo/blob/main/src/main/java/io/kestra/plugin/odoo/package-info.java) and choosing the right category.
 - [ ] Icons added in `src/main/resources/icons` in SVG format and not in thumbnail (keep it big):
   - `plugin-icon.svg`
