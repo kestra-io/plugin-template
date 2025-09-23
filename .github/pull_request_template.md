@@ -40,7 +40,7 @@ Thank you for your contribution. ❤️  -->
 
 - [ ] PR Title and commits follows [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - [ ] Unit Tests added or updated to cover the change (using the `RunContext` to actually run tasks).
-- [ ] Documentation updated (plugin docs).
+- [ ] Documentation updated (plugin docs from `@Schema` for properties and outputs, `@Plugin` with examples, `README.md` file with basic knowledge and specifics).
 - [ ] Setup instructions included if needed (API keys, accounts, etc.).
 
 ⚙️ **Properties**
