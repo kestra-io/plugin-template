@@ -36,6 +36,8 @@ If there are no setup requirements, you can remove this section.
 
 Thank you for your contribution. ❤️  -->
 
+---
+
 ### Contributor Checklist ✅
 
 - [ ] PR Title and commits follows [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
