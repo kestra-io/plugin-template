@@ -54,7 +54,7 @@ Thank you for your contribution. ❤️  -->
 
 ✨ **New plugins / subplugins**
 - [ ] Add a `package-info.java` under each sub package respecting [this format](https://github.com/kestra-io/plugin-odoo/blob/main/src/main/java/io/kestra/plugin/odoo/package-info.java) and choosing the right category.
-- [ ] Icons added in `src/main/resources/icons`
+- [ ] Icons added in `src/main/resources/icons` in SVG format and not in thumbnail (keep it big):
   - `plugin-icon.svg`
   - One icon per package, e.g. `io.kestra.plugin.apify.svg`
   - For subpackages, e.g. `io.kestra.plugin.aws.s3`, add `io.kestra.plugin.aws.s3.svg`
