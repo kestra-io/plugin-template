@@ -38,7 +38,7 @@ Thank you for your contribution. ❤️  -->
 
 ### Contributor Checklist ✅
 
-- [ ] PR Title follows [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- [ ] PR Title and commits follows [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - [ ] Unit Tests added or updated to cover the change (using the `RunContext` to actually run tasks).
 - [ ] Documentation updated (plugin docs).
 - [ ] Setup instructions included if needed (API keys, accounts, etc.).
