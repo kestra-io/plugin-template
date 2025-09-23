@@ -42,7 +42,7 @@ Thank you for your contribution. ❤️  -->
 - [ ] Unit Tests added or updated to cover the change (using the `RunContext` to actually run tasks).
 - [ ] Documentation updated (plugin docs from `@Schema` for properties and outputs, `@Plugin` with examples, `README.md` file with basic knowledge and specifics).
 - [ ] Setup instructions included if needed (API keys, accounts, etc.).
-
+- [ ] Prefix all rendered properties by `r` not `rendered` (eg: `rHost`).
 ⚙️ **Properties**
 - [ ] Properties are declared with `Property<T>` carrier type, do **not** use `@PluginProperty`.
 - [ ] Mandatory properties must be annotated with `@NotNull` and checked during the rendering.
