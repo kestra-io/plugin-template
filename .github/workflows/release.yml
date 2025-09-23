@@ -29,3 +29,5 @@ jobs:
           releaseVersion: ${{ github.event.inputs.releaseVersion }}
           nextVersion: ${{ github.event.inputs.nextVersion }}
           dryRun: ${{ github.event.inputs.dryRun }}
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
