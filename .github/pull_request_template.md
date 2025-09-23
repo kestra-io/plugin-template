@@ -44,6 +44,7 @@ Thank you for your contribution. ❤️  -->
 - [ ] Setup instructions included if needed (API keys, accounts, etc.).
 - [ ] Prefix all rendered properties by `r` not `rendered` (eg: `rHost`).
 - [ ] Add sanity checks if possible with a YAML flow inside `src/test/resources/flows`.
+- [ ] Use `runContext.logger()` to log enough important infos where it's needed and with the best level (DEBUG, INFO, WARN or ERROR).
 
 ⚙️ **Properties**
 - [ ] Properties are declared with `Property<T>` carrier type, do **not** use `@PluginProperty`.
@@ -57,8 +58,20 @@ Thank you for your contribution. ❤️  -->
 
 ✨ **New plugins / subplugins**
 - [ ] If you are fetching data (one, many or too many), you must add a `Property<FetchType> fetchType` to be able to use `FETCH_ONE`, `FETCH` and even `STORE` to store big amount of data in the internal storage.
+  See example [here](https://github.com/kestra-io/plugin-elasticsearch/blob/master/src/main/java/io/kestra/plugin/elasticsearch/Search.java#L76).
+- [ ] Use `"{{ secret('YOUR_SECRET') }}"` in the examples for sensible infos such as an API KEY.
 - [ ] Add a `package-info.java` under each sub package respecting [this format](https://github.com/kestra-io/plugin-odoo/blob/main/src/main/java/io/kestra/plugin/odoo/package-info.java) and choosing the right category.
 - [ ] Icons added in `src/main/resources/icons` in SVG format and not in thumbnail (keep it big):
   - `plugin-icon.svg`
   - One icon per package, e.g. `io.kestra.plugin.apify.svg`
   - For subpackages, e.g. `io.kestra.plugin.aws.s3`, add `io.kestra.plugin.aws.s3.svg`
+- [ ] Align the `"""` to close examples blocks with the flow id.
+
+🧪 **Tests**
+- [ ] Avoid disabling tests for CI. Instead configure a local environment whenever it's possible with `.github/setup-unit.sh` (which can be executed locally and in the CI) all along with a new `docker-compose-ci.yml` file (do **not** edit the existing `docker-compose.yml`).
+- [ ] Provide screenshots from your QA / tests locally in the PR description. The goal here is too use the JAR of the plugin and directly test it locally in Kestra UI to ensure it integrates well.
+
+📤 **Outputs**
+- [ ] Do not send back as outputs the same infos you already have in your properties.
+- [ ] If you do not have any output use `VoidOutput`.
+- [ ] Do not output twice the same infos (eg: a status code, an error code saying the same thing...).
