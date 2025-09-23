@@ -44,9 +44,11 @@ Thank you for your contribution. ❤️  -->
 - [ ] Setup instructions included if needed (API keys, accounts, etc.).
 - [ ] Prefix all rendered properties by `r` not `rendered` (eg: `rHost`).
 - [ ] Add sanity checks if possible with a YAML flow inside `src/test/resources/flows`.
+
 ⚙️ **Properties**
 - [ ] Properties are declared with `Property<T>` carrier type, do **not** use `@PluginProperty`.
 - [ ] Mandatory properties must be annotated with `@NotNull` and checked during the rendering.
+
 🌐 **HTTP**
 - [ ] Must use Kestra’s internal HTTP client from `io.kestra.core.http.client`
 
