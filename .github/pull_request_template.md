@@ -45,7 +45,7 @@ Thank you for your contribution. ❤️  -->
 
 ⚙️ **Properties**
 - [ ] Properties are declared with `Property<T>` carrier type, do **not** use `@PluginProperty`.
-
+- [ ] Mandatory properties must be annotated with `@NotNull` and checked during the rendering.
 🌐 **HTTP**
 - [ ] Must use Kestra’s internal HTTP client from `io.kestra.core.http.client`
 
