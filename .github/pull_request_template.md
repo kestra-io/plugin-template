@@ -35,3 +35,25 @@ Remove this section if this change applies to all flows or to the documentation 
 If there are no setup requirements, you can remove this section.
 
 Thank you for your contribution. ❤️  -->
+
+### Contributor Checklist ✅
+
+- [ ] PR Title follows [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- [ ] Unit Tests added or updated to cover the change.
+- [ ] Documentation updated (plugin docs).
+- [ ] Setup instructions included if needed (API keys, accounts, etc.).
+
+⚙️ **Properties**
+- [ ] Properties are declared with `Property<T>` carrier type, do **not** use `@PluginProperty`.
+
+🌐 **HTTP**
+- [ ] Must use Kestra’s internal HTTP client from `io.kestra.core.http.client`
+
+📦 **JSON**
+- [ ] Must use Jackson mappers provided by core (`io.kestra.core.serializers`)
+
+✨ **New plugins/subplugins**
+- [ ] Icons added in `src/main/resources/icons`
+  - `plugin-icon.svg`
+  - One icon per package, e.g. `io.kestra.plugin.apify.svg`
+  - For subpackages, e.g. `io.kestra.plugin.aws.s3`, add `io.kestra.plugin.aws.s3.svg`
