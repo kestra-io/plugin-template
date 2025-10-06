@@ -26,6 +26,12 @@ on:
           - "true"
           - "false"
 
+permissions:
+  contents: write
+  checks: write
+  actions: read
+  pull-requests: write
+
 jobs:
   check:
     uses: kestra-io/actions/.github/workflows/plugins.yml@main
