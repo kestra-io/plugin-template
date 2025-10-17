@@ -9,6 +9,9 @@ on:
       nextVersion:
         description: "Next version (e.g. 1.3.0-SNAPSHOT)"
         required: false
+      kestraVersion:
+        description: "Kestra core version (e.g. 1.1.0)"
+        required: true
       dryRun:
         description: "If true, simulate the release without pushing or tagging"
         required: false
@@ -27,7 +30,9 @@ jobs:
         uses: kestra-io/actions/composite/plugin-release@main
         with:
           releaseVersion: ${{ github.event.inputs.releaseVersion }}
+          kestraVersion: ${{ github.event.inputs.kestraVersion }}
           nextVersion: ${{ github.event.inputs.nextVersion }}
           dryRun: ${{ github.event.inputs.dryRun }}
+          webhookUrl: ${{ secrets.KESTRA_WEBHOOK_URL_PLUGIN_RELEASE_INDEX }}
         env:
           GITHUB_PAT: ${{ secrets.GH_PERSONAL_TOKEN }}
