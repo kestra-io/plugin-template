@@ -11,7 +11,7 @@ on:
         required: false
       kestraVersion:
         description: "Kestra core version (e.g. 1.1.0)"
-        required: true
+        required: false
       dryRun:
         description: "If true, simulate the release without pushing or tagging"
         required: false
