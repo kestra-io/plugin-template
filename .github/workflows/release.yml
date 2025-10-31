@@ -33,6 +33,5 @@ jobs:
           kestraVersion: ${{ github.event.inputs.kestraVersion }}
           nextVersion: ${{ github.event.inputs.nextVersion }}
           dryRun: ${{ github.event.inputs.dryRun }}
-          webhookUrl: ${{ secrets.KESTRA_WEBHOOK_URL_PLUGIN_RELEASE_INDEX }}
         env:
           GITHUB_PAT: ${{ secrets.GH_PERSONAL_TOKEN }}
