@@ -62,6 +62,8 @@ Thank you for your contribution. ❤️  -->
 ✨ **New plugins / subplugins**
 - [ ] Make sure your new plugin is configured like mentioned [here](https://kestra.io/docs/plugin-developer-guide/gradle#mandatory-configuration).
 - [ ] Add a `package-info.java` under each sub package respecting [this format](https://github.com/kestra-io/plugin-odoo/blob/main/src/main/java/io/kestra/plugin/odoo/package-info.java) and choosing the right category.
+- [ ] Every time you use `runContext.metric(...)` you have to add a `@Metric` ([see this doc](https://kestra.io/docs/plugin-developer-guide/document#document-the-plugin-metrics))
+- [ ] Docs don't support to have both tasks/triggers in the root package (e.g. `io.kestra.plugin.kubernetes`) and in a sub package (e.g. `io.kestra.plugin.kubernetes.kubectl`), whether it's: all tasks/triggers in the root package OR only tasks/triggers in sub packages.
 - [ ] Icons added in `src/main/resources/icons` in SVG format and not in thumbnail (keep it big):
   - `plugin-icon.svg`
   - One icon per package, e.g. `io.kestra.plugin.aws.svg`
@@ -74,7 +76,7 @@ Thank you for your contribution. ❤️  -->
 🧪 **Tests**
 - [ ] Unit Tests added or updated to cover the change (using the `RunContext` to actually run tasks).
 - [ ] Add sanity checks if possible with a YAML flow inside `src/test/resources/flows`.
-- [ ] Avoid disabling tests for CI. Instead, configure a local environment whenever it's possible with `.github/setup-unit.sh` (which can be executed locally and in the CI) all along with a new `docker-compose-ci.yml` file (do **not** edit the existing `docker-compose.yml`).
+- [ ] Avoid disabling tests for CI. Instead, configure a local environment whenever it's possible with `.github/setup-unit.sh` (to be set executable with `chmod +x setup-unit.sh`) (which can be executed locally and in the CI) all along with a new `docker-compose-ci.yml` file (do **not** edit the existing `docker-compose.yml`). If needed, create an executable (`chmod +x cleanup-unit.sh`) `cleanup-unit.sh` to remove the potential costly resources (tables, datasets, etc).
 - [ ] Provide screenshots from your QA / tests locally in the PR description. The goal here is to use the JAR of the plugin and directly test it locally in Kestra UI to ensure it integrates well.
 
 📤 **Outputs**
