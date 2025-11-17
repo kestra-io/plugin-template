@@ -1,5 +1,5 @@
 plugins {
-    id "com.vanniktech.maven.publish" version "0.34.0"
+    id "com.vanniktech.maven.publish" version "0.35.0"
     id "io.kestra.gradle.inject-bom-versions" version "1.0.0"
     id 'java-library'
     id "idea"
