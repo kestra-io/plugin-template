@@ -118,7 +118,7 @@ dependencies {
 }
 
 test {
-    jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
+    jvmArgs = ["-javaagent:${configurations.agent.singleFile}"]
 }
 
 /**********************************************************************************************************************\
@@ -174,11 +174,11 @@ tasks.withType(GenerateModuleMetadata).configureEach {
 jar {
     manifest {
         attributes(
-                "X-Kestra-Name": project.name,
-                "X-Kestra-Title": "Template",
-                "X-Kestra-Group": project.group + ".templates",
-                "X-Kestra-Description": project.description,
-                "X-Kestra-Version": project.version
+            "X-Kestra-Name": project.name,
+            "X-Kestra-Title": "Template",
+            "X-Kestra-Group": project.group + ".templates",
+            "X-Kestra-Description": project.description,
+            "X-Kestra-Version": project.version
         )
     }
 }
