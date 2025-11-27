@@ -1,11 +1,7 @@
 group: io.kestra.plugin.template
 name: "template"
 title: "Template"
-<<<<<<< Updated upstream
-description: ""
-=======
 description: "Plugin template for Kestra"
->>>>>>> Stashed changes
 body: ""
 videos: []
 createdBy: "Kestra Core Team"
