@@ -72,6 +72,7 @@ Thank you for your contribution. ❤️  -->
 - [ ] Use `"{{ secret('YOUR_SECRET') }}"` in the examples for sensible infos such as an API KEY.
 - [ ] If you are fetching data (one, many or too many), you must add a `Property<FetchType> fetchType` to be able to use `FETCH_ONE`, `FETCH` and even `STORE` to store big amount of data in the internal storage.
 - [ ] Align the `"""` to close examples blocks with the flow id.
+- [ ] Update the existing `index.yaml` for the main plugin, and for each new subpackage add a metadata file named exactly after the subpackage (e.g. `s3.yaml` for `io.kestra.plugin.aws.s3`) under `src/main/resources/metadata/`, following the same schema.
 
 🧪 **Tests**
 - [ ] Unit Tests added or updated to cover the change (using the `RunContext` to actually run tasks).

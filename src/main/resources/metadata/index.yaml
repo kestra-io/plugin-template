@@ -1,0 +1,8 @@
+group: io.kestra.plugin.template
+name: "template"
+title: "Template"
+description: "Plugin template for Kestra"
+body: ""
+videos: []
+createdBy: "Kestra Core Team"
+managedBy: "Kestra Core Team"
