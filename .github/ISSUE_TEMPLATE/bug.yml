@@ -21,5 +21,6 @@ body:
     validations:
       required: false
 labels:
-  - bug
   - area/plugin
+type: Bug
+projects: ["kestra-io/15"]

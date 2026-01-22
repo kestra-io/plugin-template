@@ -8,5 +8,6 @@ body:
     validations:
       required: true
 labels:
-  - enhancement
   - area/plugin
+type: Feature
+projects: ["kestra-io/15"]
