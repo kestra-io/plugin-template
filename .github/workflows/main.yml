@@ -25,6 +25,11 @@ on:
         options:
           - "true"
           - "false"
+      kestra-version:
+        description: 'Kestra version'
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -38,4 +43,5 @@ jobs:
     uses: kestra-io/actions/.github/workflows/plugins.yml@main
     with:
       skip-test: ${{ github.event.inputs.skip-test == 'true' }}
+      kestra-version: ${{ github.event.inputs.kestra-version }}
     secrets: inherit
