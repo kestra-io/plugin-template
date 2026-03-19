@@ -28,7 +28,7 @@ class ExampleTest {
         RunContext runContext = runContextFactory.of(Map.of("variable", "John Doe"));
 
         Example task = Example.builder()
-            .format(new Property<>("Hello {{ variable }}"))
+            .format(Property.ofExpression("Hello {{ variable }}"))
             .build();
 
         Example.Output runOutput = task.run(runContext);
