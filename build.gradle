@@ -9,6 +9,7 @@ plugins {
     id 'signing'
     id "com.github.ben-manes.versions" version "0.53.0"
     id 'net.researchgate.release' version '3.1.0'
+    id 'com.github.node-gradle.node' version '7.1.0'
 }
 
 def isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
@@ -201,6 +202,22 @@ release {
     git {
         requireBranch.set('main')
     }
+}
+
+// Build the UI module before packaging (only if ui/ directory exists)
+if (file('ui').exists()) {
+    tasks.register('npmInstallUI', com.github.gradle.node.npm.task.NpmTask) {
+        args = ['install']
+        workingDir = file('ui')
+    }
+
+    tasks.register('buildUI', com.github.gradle.node.npm.task.NpmTask) {
+        dependsOn 'npmInstallUI'
+        args = ['run', 'build', '--', '--outDir', '../src/main/resources/plugin-ui']
+        workingDir = file('ui')
+    }
+    processResources.dependsOn 'buildUI'
+    shadowJar.dependsOn 'buildUI'
 }
 
 /**********************************************************************************************************************\
