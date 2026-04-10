@@ -44,4 +44,5 @@ jobs:
     with:
       skip-test: ${{ github.event.inputs.skip-test == 'true' }}
       kestra-version: ${{ github.event.inputs.kestra-version }}
+      java-version: '25'
     secrets: inherit
