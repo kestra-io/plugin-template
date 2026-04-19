@@ -7,8 +7,9 @@
 
 ## Why
 
-- This plugin integrates Kestra with template.
-- It provides a plugin to show how to build a plugin in Kestra.
+- What user problem does this solve? Teams need a concrete starting point for building and validating new Kestra plugins without recreating the same project scaffolding from scratch.
+- Why would a team adopt this plugin in a workflow? It gives plugin authors a ready-made reference repo they can adapt alongside their own build, test, and publishing workflow.
+- What operational/business outcome does it enable? It shortens plugin delivery time, reduces setup mistakes, and makes internal or partner plugin development more repeatable.
 
 ## How
 
