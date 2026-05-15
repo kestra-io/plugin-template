@@ -33,10 +33,10 @@ jobs:
       - name: Release plugin using reusable action
         uses: kestra-io/actions/composite/plugin-release@main
         with:
+          gh-app-id: ${{ secrets.GH_BOT_APP_ID }}
+          gh-app-private-key: ${{ secrets.GH_BOT_PRIVATE_KEY }}
           releaseVersion: ${{ github.event.inputs.releaseVersion }}
           kestraVersion: ${{ github.event.inputs.kestraVersion }}
           nextVersion: ${{ github.event.inputs.nextVersion }}
           dryRun: ${{ github.event.inputs.dryRun }}
           commitsList: ${{ github.event.inputs.commitsList }}
-        env:
-          GITHUB_PAT: ${{ secrets.GH_PERSONAL_TOKEN }}
