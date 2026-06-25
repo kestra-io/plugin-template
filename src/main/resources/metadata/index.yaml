@@ -1,4 +1,4 @@
-group: io.kestra.plugin.template
+group: io.kestra.plugin.templates
 name: "template"
 title: "Template"
 description: "Plugin template for Kestra"
