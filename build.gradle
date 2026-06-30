@@ -1,8 +1,8 @@
 plugins {
-    id 'io.kestra.gradle.repository-conventions' version '1.2.3'
+    id 'io.kestra.gradle.repository-conventions' version '1.2.5'
     id "com.vanniktech.maven.publish" version "0.37.0"
-    id "io.kestra.gradle.inject-bom-versions" version "1.2.4"
-    id "io.kestra.gradle.plugin-doc-lint" version "1.2.4"
+    id "io.kestra.gradle.inject-bom-versions" version "1.2.5"
+    id "io.kestra.gradle.plugin-doc-lint" version "1.2.5"
     id 'java-library'
     id "idea"
     id 'jacoco'
