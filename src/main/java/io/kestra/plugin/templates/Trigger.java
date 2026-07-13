@@ -1,6 +1,7 @@
 package io.kestra.plugin.templates;
 
 import io.kestra.core.exceptions.IllegalVariableEvaluationException;
+import io.kestra.core.models.annotations.Example;
 import io.kestra.core.models.annotations.Plugin;
 import io.kestra.core.models.conditions.ConditionContext;
 import io.kestra.core.models.executions.Execution;
@@ -19,15 +20,37 @@ import java.util.Optional;
 @EqualsAndHashCode
 @Getter
 @NoArgsConstructor
-@Plugin
+@Plugin(
+    examples = {
+        @Example(
+            title = "Trigger an execution randomly",
+            full = true,
+            code = """
+                id: example_trigger
+                namespace: company.team
+
+                tasks:
+                  - id: log
+                    type: io.kestra.plugin.core.log.Log
+                    message: "Triggered"
+
+                triggers:
+                  - id: random
+                    type: io.kestra.plugin.templates.Trigger
+                    min: 0.5
+                """
+        )
+    }
+)
 @Schema(
     title = "Trigger an execution randomly",
-    description ="Trigger an execution randomly"
+    description = "Trigger an execution randomly"
 )
 public class Trigger extends AbstractTrigger implements PollingTriggerInterface, TriggerOutput<Trigger.Output> {
     @Builder.Default
     private final Duration interval = Duration.ofSeconds(60);
 
+    @Schema(title = "Probability threshold below which no execution is created")
     @Builder.Default
     protected Property<Double> min = Property.ofValue(0.5);
 
@@ -54,6 +77,7 @@ public class Trigger extends AbstractTrigger implements PollingTriggerInterface,
     @Builder
     @Getter
     public static class Output implements io.kestra.core.models.tasks.Output {
+        @Schema(title = "The random value that triggered the execution")
         private Double random;
     }
 }

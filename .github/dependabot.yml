@@ -21,3 +21,7 @@ updates:
     labels:
       - "dependency-upgrade"
     open-pull-requests-limit: 50
+    groups:
+      kestra-gradle-plugins:
+        patterns:
+          - "io.kestra.gradle.*"
