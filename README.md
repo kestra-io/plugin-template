@@ -48,6 +48,24 @@
 - Provides plugin components under `io.kestra.plugin.templates`.
 - Includes classes such as `Example`, `Trigger`.
 
+## Running Kestra locally with this plugin
+
+1. Build the shadow JAR: `./gradlew shadowJar`. The output lands in `build/libs/`.
+2. Run `docker compose up`. `docker-compose.yml` builds `kestra/kestra:latest` and mounts `build/libs/` to `/app/plugins/`, so Kestra picks up the jar on startup.
+3. Kestra UI is available at [localhost:8080](http://localhost:8080).
+
+### Plugins folder gotcha
+
+Mounting a host folder onto `/app/plugins/` replaces the container's plugins directory rather than adding to it. Core plugins (the ones logged as `Registered N core plugins`) are compiled into Kestra itself and aren't affected, but any additional plugin normally bundled in the base image under `/app/plugins/` (e.g. the Python script plugin) gets hidden once the mount is in place. If a flow you're testing depends on another plugin, copy its jar into `build/libs/` too before starting the container.
+
+### JFR startup error
+
+On some hosts, `command: server local` fails with:
+```
+Unable to create JFR repository directory using base location (/tmp)
+```
+`docker-compose.yml` works around this by mounting `/tmp` as `tmpfs`. If you build your own compose file or run Kestra via `docker run`, add the same workaround, e.g. `-v /tmp:/tmp` or `--tmpfs /tmp`. Tracked upstream in [kestra-io/kestra#17405](https://github.com/kestra-io/kestra/issues/17405).
+
 ## Documentation
 * Full documentation can be found under: [kestra.io/docs](https://kestra.io/docs)
 * Documentation for developing a plugin is included in the [Plugin Developer Guide](https://kestra.io/docs/plugin-developer-guide/)

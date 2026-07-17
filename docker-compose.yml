@@ -10,3 +10,7 @@ services:
       - "8080:8080"
     volumes:
       - ./build/libs/:/app/plugins/
+    # works around "Unable to create JFR repository directory using base
+    # location (/tmp)" on some hosts, see kestra-io/kestra#17405
+    tmpfs:
+      - /tmp
