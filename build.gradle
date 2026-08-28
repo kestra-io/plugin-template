@@ -6,7 +6,6 @@ plugins {
     id 'java-library'
     id "idea"
     id 'jacoco'
-    id "com.adarshr.test-logger" version "4.0.0"
     id "com.gradleup.shadow" version "9.6.1"
     id 'signing'
     id "com.github.ben-manes.versions" version "0.61.0"
@@ -59,15 +58,6 @@ dependencies {
  **********************************************************************************************************************/
 test {
     useJUnitPlatform()
-}
-
-testlogger {
-    theme = "mocha-parallel"
-    showExceptions = true
-    showFullStackTraces = true
-    showStandardStreams = true
-    showPassedStandardStreams = false
-    showSkippedStandardStreams = true
 }
 
 dependencies {
