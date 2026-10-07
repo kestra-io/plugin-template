@@ -3,7 +3,9 @@
 ## What
 
 - Provides plugin components under `io.kestra.plugin.mailchimp` to work with Mailchimp from Kestra flows.
-- Work in progress: tasks and triggers are being added, see `src/main/resources/doc/io.kestra.plugin.mailchimp.md`.
+- Tasks: `account.Ping`, `audiences.{ListAudiences,ListMembers,UpsertMember,BatchSubscribe,UpdateMemberTags}`, `campaigns.{ListCampaigns,SendCampaign}`, `reports.{GetCampaignReport,ListEmailActivity}`.
+- Triggers: `audiences.NewSubscriberTrigger`, `audiences.MemberStatusChangeTrigger`, `campaigns.CampaignSentTrigger`.
+- Details: `src/main/resources/doc/io.kestra.plugin.mailchimp.md`.
 
 ## Why
 
@@ -15,9 +17,11 @@
 
 ### Architecture
 
-Single-module plugin. Source package under `io.kestra.plugin`:
+Single-module plugin. Source packages under `io.kestra.plugin.mailchimp`:
 
-- `mailchimp`
+- root: `AbstractMailchimpTask`, `AbstractMailchimpTrigger`, `MailchimpClient` (HTTP, auth, retry), `MailchimpConnectionInterface`, `MailchimpException`
+- `account`, `audiences`, `campaigns`, `reports`: tasks and triggers (one `package-info.java` each)
+- `models`: shared helpers (`CursorPoll`, `TriggerCursor`, `FetchOutput`, `SortDir`, `SubscriberHash`)
 
 Uses the JDK `java.net.http.HttpClient`; no extra HTTP client or SDK. Kestra's core `HttpClient` is not used because it replays POST on 429/503 and that retry cannot be disabled.
 
@@ -25,7 +29,9 @@ Uses the JDK `java.net.http.HttpClient`; no extra HTTP client or SDK. Kestra's c
 
 ```
 plugin-mailchimp/
-├── src/main/java/io/kestra/plugin/mailchimp/
+├── src/main/java/io/kestra/plugin/mailchimp/{account,audiences,campaigns,reports,models}
+├── src/main/resources/{doc,metadata,icons}
+├── src/test/java/io/kestra/plugin/mailchimp/
 ├── build.gradle
 └── README.md
 ```

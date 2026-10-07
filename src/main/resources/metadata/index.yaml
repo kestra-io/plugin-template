@@ -2,7 +2,7 @@ group: io.kestra.plugin.mailchimp
 name: "mailchimp"
 title: "Mailchimp"
 description: "Tasks that connect Kestra workflows to Mailchimp."
-body: "Work in progress. Manage audiences, members, tags and campaigns in Mailchimp from Kestra flows. Authenticate with an API key or OAuth access token and keep credentials in secrets."
+body: "Manage audiences, members, tags and campaigns in Mailchimp, read campaign reports, and trigger flows on new subscribers, status changes and sent campaigns. Authenticate with an API key or OAuth access token and keep credentials in secrets."
 videos: []
-createdBy: "Kestra Core Team"
-managedBy: "Kestra Core Team"
+createdBy: "Community"
+managedBy: "Community"

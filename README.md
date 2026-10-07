@@ -39,18 +39,63 @@
 
 ## Why
 
-- Manage Mailchimp audiences, members, tags and campaigns from Kestra flows without custom API scripts.
+- Manage Mailchimp audiences, members, tags and campaigns from Kestra flows without custom API scripts, next to the rest of your data preparation, retries and notifications.
 
 ## What
 
-- Provides plugin components under `io.kestra.plugin.mailchimp`.
-- Work in progress: tasks and triggers are being added, see `src/main/resources/doc/io.kestra.plugin.mailchimp.md`.
+Plugin components under `io.kestra.plugin.mailchimp`:
+
+| Task or trigger | What it does |
+|---|---|
+| `account.Ping` | Check credentials and data center |
+| `audiences.ListAudiences` | List audiences |
+| `audiences.ListMembers` | List the members of an audience |
+| `audiences.UpsertMember` | Add or update one member |
+| `audiences.BatchSubscribe` | Subscribe or update many members from an ION file |
+| `audiences.UpdateMemberTags` | Add or remove tags on a member |
+| `campaigns.ListCampaigns` | List campaigns |
+| `campaigns.SendCampaign` | Send a campaign (irreversible; checks the send checklist first) |
+| `reports.GetCampaignReport` | Get the report summary of a sent campaign |
+| `reports.ListEmailActivity` | List per-recipient activity of a sent campaign |
+| `audiences.NewSubscriberTrigger` | Start an execution for new subscribers |
+| `audiences.MemberStatusChangeTrigger` | Start an execution when members get a status (e.g. unsubscribed) |
+| `campaigns.CampaignSentTrigger` | Start an execution for sent campaigns |
+
+List tasks take a `fetchType` (`FETCH`, `FETCH_ONE`, `STORE`, `NONE`). Triggers poll every `PT5M` by default (minimum `PT30S`), keep their position in the namespace KV Store, and do not fire on the first poll.
+
+## Authentication
+
+Set exactly one of `apiKey` or `accessToken` on every task and trigger, and keep it in a secret:
+
+- `apiKey`: the data center is read from the key suffix (`...-us19`). `server` overrides it.
+- `accessToken` (OAuth): `server` is required. Get the token once outside Kestra and read `dc` from `https://login.mailchimp.com/oauth2/metadata`.
+
+## Example
+
+```yaml
+id: mailchimp_ping
+namespace: company.team
+
+tasks:
+  - id: ping
+    type: io.kestra.plugin.mailchimp.account.Ping
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+```
+
+See `src/main/resources/doc/io.kestra.plugin.mailchimp.md` for rate limits, retries, trigger behavior and consent notes.
+
+## Setup
+
+- JDK 21 to 23 (Lombok does not support newer JDKs yet) and Docker with Docker Compose.
+- Credentials: copy `.env.example` to `.env` (git-ignored). The API key comes from Account > Extras > API keys in Mailchimp; the data center is the part after the dash in the key. Use a sandbox account.
+- `./gradlew test` runs the unit tests (no Mailchimp account needed). `./gradlew build` also lints the plugin docs.
 
 ## Running Kestra locally with this plugin
 
-1. Build the shadow JAR: `./gradlew shadowJar`. The output lands in `build/libs/`.
-2. Run `docker compose up`. `docker-compose.yml` builds `kestra/kestra:latest` and mounts `build/libs/` to `/app/plugins/`, so Kestra picks up the jar on startup.
+1. Build the plugin: `./gradlew build` (or `./gradlew shadowJar`). The jar lands in `build/libs/`.
+2. Run `docker compose up`. `docker-compose.yml` builds the Kestra image from `Dockerfile` and mounts `build/libs/` to `/app/plugins/`, so Kestra picks up the jar on startup.
 3. Kestra UI is available at [localhost:8080](http://localhost:8080).
+4. `{{ secret('MAILCHIMP_API_KEY') }}` reads the environment variable `SECRET_MAILCHIMP_API_KEY`, whose value is the base64 of the key (see `.env.example`).
 
 ### Plugins folder gotcha
 
