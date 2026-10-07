@@ -1,0 +1,8 @@
+group: io.kestra.plugin.mailchimp.account
+name: "account"
+title: "Mailchimp Account"
+description: "Tasks that check the connection to a Mailchimp account."
+body: ""
+videos: []
+createdBy: "Kestra Core Team"
+managedBy: "Kestra Core Team"

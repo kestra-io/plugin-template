@@ -1,9 +1,10 @@
-package io.kestra.plugin.mailchimp;
+package io.kestra.plugin.mailchimp.account;
 
 import io.kestra.core.models.annotations.Example;
 import io.kestra.core.models.annotations.Plugin;
 import io.kestra.core.models.tasks.RunnableTask;
 import io.kestra.core.runners.RunContext;
+import io.kestra.plugin.mailchimp.AbstractMailchimpTask;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

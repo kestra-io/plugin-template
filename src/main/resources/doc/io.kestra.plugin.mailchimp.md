@@ -23,7 +23,7 @@ namespace: company.team
 
 tasks:
   - id: ping
-    type: io.kestra.plugin.mailchimp.Ping
+    type: io.kestra.plugin.mailchimp.account.Ping
     apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
 ```
 

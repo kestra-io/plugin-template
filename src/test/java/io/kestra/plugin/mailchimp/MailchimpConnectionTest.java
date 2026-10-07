@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import io.kestra.core.junit.annotations.KestraTest;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.runners.RunContextFactory;
+import io.kestra.plugin.mailchimp.account.Ping;
 
 import jakarta.inject.Inject;
 

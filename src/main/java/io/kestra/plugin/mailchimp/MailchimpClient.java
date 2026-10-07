@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -109,6 +110,20 @@ public class MailchimpClient implements Closeable {
      * array to {@code pageHandler}. Stops on a short page or once {@code total_items} items were read.
      */
     public void getPaged(String path, Map<String, String> query, int pageSize, Consumer<JsonNode> pageHandler, String arrayField) throws Exception {
+        getPagedWhile(path, query, pageSize, page -> {
+            var items = page.path(arrayField);
+            if (items.isArray() && !items.isEmpty()) {
+                pageHandler.accept(items);
+            }
+            return true;
+        }, arrayField);
+    }
+
+    /**
+     * Like {@link #getPaged} but hands the whole page (so callers can read {@code total_items}) to {@code pageHandler},
+     * including an empty one, and stops as soon as it returns {@code false} so no further page is requested.
+     */
+    public void getPagedWhile(String path, Map<String, String> query, int pageSize, Predicate<JsonNode> pageHandler, String arrayField) throws Exception {
         if (pageSize <= 0) {
             throw new IllegalArgumentException("'pageSize' must be > 0");
         }
@@ -120,10 +135,9 @@ public class MailchimpClient implements Closeable {
 
             var page = send("GET", path, q, null);
             var items = page.path(arrayField);
-            if (!items.isArray() || items.isEmpty()) {
+            if (!pageHandler.test(page) || !items.isArray() || items.isEmpty()) {
                 return;
             }
-            pageHandler.accept(items);
             fetched += items.size();
 
             // total_items can shrink while we paginate, so it is re-read on every page

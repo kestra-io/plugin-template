@@ -97,4 +97,36 @@ class MailchimpClientPaginationTest {
             assertThat(fake.requests(), empty());
         }
     }
+
+    @Test
+    void getPagedWhileStopsWhenHandlerReturnsFalseWithoutExtraRequest() throws Exception {
+        try (var fake = new FakeMailchimpServer()) {
+            fake.on("GET", PATH, Response.json(200, page(0, 1000, 5000)), Response.json(200, page(1000, 1000, 5000)));
+            var pages = new ArrayList<Integer>();
+
+            try (var client = new MailchimpClient(fake.baseUrl(), "abc-us19", 0, Duration.ofSeconds(10), d -> { })) {
+                client.getPagedWhile("/lists/a/members", null, 1000, p -> {
+                    pages.add(p.path("members").size());
+                    return pages.size() < 2;
+                }, "members");
+            }
+
+            assertThat(pages, contains(1000, 1000));
+            assertThat(fake.requests(), hasSize(2));
+        }
+    }
+
+    @Test
+    void getPagedWhileHandsOverAnEmptyPage() throws Exception {
+        try (var fake = new FakeMailchimpServer()) {
+            fake.on("GET", PATH, Response.json(200, page(0, 0, 0)));
+            var totals = new ArrayList<Long>();
+
+            try (var client = new MailchimpClient(fake.baseUrl(), "abc-us19", 0, Duration.ofSeconds(10), d -> { })) {
+                client.getPagedWhile("/lists/a/members", null, 1000, p -> totals.add(p.get("total_items").asLong()), "members");
+            }
+
+            assertThat(totals, contains(0L));
+        }
+    }
 }
