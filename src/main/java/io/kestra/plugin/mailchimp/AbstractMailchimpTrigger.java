@@ -68,6 +68,22 @@ public abstract class AbstractMailchimpTrigger extends AbstractTrigger implement
     @PluginProperty(group = "advanced")
     private Property<Duration> timeout = Property.ofValue(Duration.ofSeconds(120));
 
+    public static final Duration MIN_INTERVAL = Duration.ofSeconds(30);
+
+    @Builder.Default
+    @Schema(
+        title = "Polling interval",
+        description = "Time between two polls. Defaults to 5 minutes, minimum 30 seconds to stay well within Mailchimp's rate limits."
+    )
+    @PluginProperty(group = "execution")
+    private Duration interval = Duration.ofMinutes(5);
+
+    protected void checkInterval() {
+        if (interval.compareTo(MIN_INTERVAL) < 0) {
+            throw new IllegalArgumentException("interval must be at least " + MIN_INTERVAL + ", got " + interval);
+        }
+    }
+
     @VisibleForTesting
     protected MailchimpClient client(RunContext runContext) throws Exception {
         return MailchimpConnectionInterface.client(runContext, this);

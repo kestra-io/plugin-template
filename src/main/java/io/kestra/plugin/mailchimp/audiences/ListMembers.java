@@ -3,8 +3,11 @@ package io.kestra.plugin.mailchimp.audiences;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import io.kestra.core.models.annotations.Example;
 import io.kestra.core.models.annotations.Plugin;
@@ -111,6 +114,11 @@ public class ListMembers extends AbstractMailchimpTask implements RunnableTask<F
     @PluginProperty(group = "advanced")
     private Property<Integer> maxItems;
 
+    /** Member JSON to row; shared with the member triggers. */
+    static Map<String, Object> toRow(JsonNode item) {
+        return FetchOutput.row(item, CAMEL);
+    }
+
     @Override
     public FetchOutput run(RunContext runContext) throws Exception {
         var rListId = runContext.render(listId).as(String.class).orElseThrow(() -> new IllegalArgumentException("'listId' is required"));
@@ -129,7 +137,7 @@ public class ListMembers extends AbstractMailchimpTask implements RunnableTask<F
                 runContext, client, path, query, "members",
                 runContext.render(fetchType).as(FetchType.class).orElse(FetchType.FETCH),
                 runContext.render(maxItems).as(Integer.class).orElse(null),
-                item -> FetchOutput.row(item, CAMEL)
+                ListMembers::toRow
             );
         }
     }

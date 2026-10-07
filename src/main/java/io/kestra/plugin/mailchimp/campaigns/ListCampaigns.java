@@ -2,7 +2,10 @@ package io.kestra.plugin.mailchimp.campaigns;
 
 import java.time.Instant;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import io.kestra.core.models.annotations.Example;
 import io.kestra.core.models.annotations.Plugin;
@@ -109,6 +112,12 @@ public class ListCampaigns extends AbstractMailchimpTask implements RunnableTask
     @PluginProperty(group = "advanced")
     private Property<Integer> maxItems;
 
+    /** Campaign JSON to row; shared with {@link CampaignSentTrigger}. */
+    static Map<String, Object> toRow(JsonNode item) {
+        var row = FetchOutput.hoist(FetchOutput.row(item, CAMEL), item.path("recipients"), "list_id");
+        return FetchOutput.hoist(row, item.path("settings"), "subject_line", "title");
+    }
+
     @Override
     public FetchOutput run(RunContext runContext) throws Exception {
         var query = new LinkedHashMap<String, String>();
@@ -125,10 +134,7 @@ public class ListCampaigns extends AbstractMailchimpTask implements RunnableTask
                 runContext, client, "/campaigns", query, "campaigns",
                 runContext.render(fetchType).as(FetchType.class).orElse(FetchType.FETCH),
                 runContext.render(maxItems).as(Integer.class).orElse(null),
-                item -> {
-                    var row = FetchOutput.hoist(FetchOutput.row(item, CAMEL), item.path("recipients"), "list_id");
-                    return FetchOutput.hoist(row, item.path("settings"), "subject_line", "title");
-                }
+                ListCampaigns::toRow
             );
         }
     }

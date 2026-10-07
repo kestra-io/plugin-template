@@ -60,7 +60,8 @@ import lombok.experimental.SuperBuilder;
     }
 )
 public class GetCampaignReport extends AbstractMailchimpTask implements RunnableTask<GetCampaignReport.Output> {
-    private static final Set<String> CAMEL = Set.of("emails_sent", "send_time", "list_id", "subject_line");
+    /** Report keys exposed in camelCase; shared with {@code CampaignSentTrigger}. */
+    public static final Set<String> CAMEL = Set.of("emails_sent", "send_time", "list_id", "subject_line");
 
     @Schema(title = "Campaign ID", description = "Id of a sent campaign, as returned by `ListCampaigns`.")
     @NotNull

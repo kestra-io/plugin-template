@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -56,6 +57,7 @@ public class FakeMailchimpServer implements AutoCloseable {
     private final HttpServer server;
     private final Map<String, Deque<Response>> scripts = new HashMap<>();
     private final Map<String, Response> last = new HashMap<>();
+    private final Map<String, Function<Recorded, Response>> handlers = new HashMap<>();
     private final List<Recorded> requests = Collections.synchronizedList(new ArrayList<>());
 
     public FakeMailchimpServer() throws IOException {
@@ -69,6 +71,14 @@ public class FakeMailchimpServer implements AutoCloseable {
     public FakeMailchimpServer on(String method, String path, Response... responses) {
         synchronized (scripts) {
             scripts.computeIfAbsent(method + " " + path, k -> new ArrayDeque<>()).addAll(List.of(responses));
+        }
+        return this;
+    }
+
+    /** Answers METHOD + path by computing the response from the request (takes precedence over scripts). */
+    public FakeMailchimpServer handle(String method, String path, Function<Recorded, Response> handler) {
+        synchronized (scripts) {
+            handlers.put(method + " " + path, handler);
         }
         return this;
     }
@@ -91,13 +101,16 @@ public class FakeMailchimpServer implements AutoCloseable {
         var headers = new LinkedHashMap<String, String>();
         ex.getRequestHeaders().forEach((k, v) -> headers.put(k.toLowerCase(), v.getFirst()));
         var path = ex.getRequestURI().getRawPath();
-        requests.add(new Recorded(ex.getRequestMethod(), path, ex.getRequestURI().getRawQuery(), headers, body));
+        var recorded = new Recorded(ex.getRequestMethod(), path, ex.getRequestURI().getRawQuery(), headers, body);
+        requests.add(recorded);
 
         var key = ex.getRequestMethod() + " " + path;
         Response response;
         synchronized (scripts) {
             var queue = scripts.get(key);
-            if (queue != null && !queue.isEmpty()) {
+            if (handlers.containsKey(key)) {
+                response = handlers.get(key).apply(recorded);
+            } else if (queue != null && !queue.isEmpty()) {
                 response = queue.poll();
                 last.put(key, response);
             } else {
