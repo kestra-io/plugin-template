@@ -6,6 +6,10 @@ services:
       context: .
       dockerfile: Dockerfile
     command: server local
+    # SECRET_* variables feed {{ secret(...) }}
+    env_file:
+      - path: .env
+        required: false
     ports:
       - "8080:8080"
     volumes:

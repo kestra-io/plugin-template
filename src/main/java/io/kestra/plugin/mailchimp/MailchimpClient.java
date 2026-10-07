@@ -65,8 +65,13 @@ public class MailchimpClient implements Closeable {
     public JsonNode send(String method, String path, Map<String, String> query, Object body) throws Exception {
         var builder = HttpRequest.newBuilder(uri(path, query))
             .timeout(timeout)
-            .header("Authorization", "Bearer " + token)
             .header("Accept", "application/json");
+        try {
+            builder.header("Authorization", "Bearer " + token);
+        } catch (IllegalArgumentException e) {
+            // the JDK message quotes the header value, i.e. the secret: never propagate it
+            throw new IllegalArgumentException("Invalid credential: it cannot be sent as an HTTP header value");
+        }
         if (body != null) {
             builder.header("Content-Type", "application/json")
                 .method(method, HttpRequest.BodyPublishers.ofString(JacksonMapper.ofJson().writeValueAsString(body)));

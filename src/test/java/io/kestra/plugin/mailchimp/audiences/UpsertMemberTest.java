@@ -67,7 +67,8 @@ class UpsertMemberTest {
             assertThat(req.query(), equalTo("skip_merge_validation=true"));
             assertThat(req.header("authorization"), equalTo("Bearer abc-us19"));
             var body = json(req.body());
-            assertThat(body.get("email_address").asText(), equalTo("jane.doe+news@example.com"));
+            // trimmed, original case kept; only the hash is lower-cased
+            assertThat(body.get("email_address").asText(), equalTo("Jane.Doe+news@Example.COM"));
             assertThat(body.get("status_if_new").asText(), equalTo("subscribed"));
             assertThat(body.get("status").asText(), equalTo("pending"));
             assertThat(body.at("/merge_fields/FNAME").asText(), equalTo("Jane"));

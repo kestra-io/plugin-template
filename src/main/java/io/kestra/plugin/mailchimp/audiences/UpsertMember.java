@@ -71,7 +71,7 @@ public class UpsertMember extends AbstractMailchimpTask implements RunnableTask<
     @PluginProperty(group = "main")
     private Property<String> listId;
 
-    @Schema(title = "Email address", description = "Contact email. Trimmed and lower-cased before it is hashed and sent.")
+    @Schema(title = "Email address", description = "Contact email. Trimmed and sent as given; only the subscriber hash uses the lower-cased form.")
     @NotNull
     @PluginProperty(group = "main")
     private Property<String> email;
@@ -108,8 +108,8 @@ public class UpsertMember extends AbstractMailchimpTask implements RunnableTask<
     @Override
     public Output run(RunContext runContext) throws Exception {
         var rListId = runContext.render(listId).as(String.class).orElseThrow(() -> new IllegalArgumentException("'listId' is required"));
-        var rEmail = runContext.render(email).as(String.class).orElseThrow(() -> new IllegalArgumentException("'email' is required")).trim().toLowerCase(Locale.ROOT);
-        var hash = SubscriberHash.of(rEmail);
+        var rEmail = runContext.render(email).as(String.class).orElseThrow(() -> new IllegalArgumentException("'email' is required")).trim();
+        var hash = SubscriberHash.of(rEmail.toLowerCase(Locale.ROOT));
         var rStatusIfNew = runContext.render(statusIfNew).as(Status.class).orElseThrow(() -> new IllegalArgumentException("'statusIfNew' is required"));
 
         var body = new LinkedHashMap<String, Object>();

@@ -1,6 +1,6 @@
 @PluginSubGroup(
     title = "Mailchimp Campaigns",
-    description = "Tasks for reading campaigns in Mailchimp.",
+    description = "Tasks and triggers for Mailchimp campaigns.",
     categories = {PluginSubGroup.PluginCategory.BUSINESS}
 )
 package io.kestra.plugin.mailchimp.campaigns;

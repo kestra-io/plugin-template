@@ -42,7 +42,7 @@ tasks:
 ## Rate limits, retries and concurrency
 
 - Mailchimp allows 10 simultaneous connections per user. Tasks send their requests one after the other, but many executions at once can exceed the limit, so cap the concurrency of flows that call Mailchimp.
-- HTTP 429 is retried with exponential backoff (1 s, doubling, capped at 30 s, with jitter) for every method. 5xx responses and I/O timeouts are retried only for GET and PUT, so POST calls such as `SendCampaign` and `BatchSubscribe` are never replayed and cannot duplicate. If one of them fails that way, check Mailchimp before re-running the flow.
+- HTTP 429 is retried with exponential backoff (1 s, doubling, capped at 30 s, with jitter) for every method. 5xx responses and I/O timeouts are retried only for GET and PUT, so a POST (such as `SendCampaign` or `BatchSubscribe`) is not replayed after a 5xx or timeout; it is retried only when Mailchimp answers 429, which means the request was rejected. If one of them fails that way, check Mailchimp before re-running the flow.
 - `maxRetries` defaults to 3; `0` disables retries. Kestra's task-level `retry` stays available on top.
 - Other 4xx answers fail immediately with Mailchimp's status, title, detail and per-field errors. A 401 means the credentials are invalid or revoked.
 - The per-call timeout defaults to 120 seconds, Mailchimp's own limit.

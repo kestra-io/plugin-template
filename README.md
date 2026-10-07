@@ -109,7 +109,7 @@ The `Integration tests` GitHub workflow runs the same command on manual dispatch
 1. Build the plugin: `./gradlew build` (or `./gradlew shadowJar`). The jar lands in `build/libs/`.
 2. Run `docker compose up`. `docker-compose.yml` builds the Kestra image from `Dockerfile` and mounts `build/libs/` to `/app/plugins/`, so Kestra picks up the jar on startup.
 3. Kestra UI is available at [localhost:8080](http://localhost:8080).
-4. `{{ secret('MAILCHIMP_API_KEY') }}` reads the environment variable `SECRET_MAILCHIMP_API_KEY`, whose value is the base64 of the key (see `.env.example`).
+4. `{{ secret('MAILCHIMP_API_KEY') }}` reads the environment variable `SECRET_MAILCHIMP_API_KEY`, whose value is the base64 of the key, without a trailing newline: `printf '%s' "$KEY" | base64`. `docker-compose.yml` passes your git-ignored `.env` (copied from `.env.example`) to the container, so every `SECRET_*` variable in it becomes a Kestra secret (compose v2.24 or newer; without a `.env` the container starts without them).
 
 ### Plugins folder gotcha
 

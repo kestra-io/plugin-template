@@ -2,6 +2,7 @@ package io.kestra.plugin.mailchimp;
 
 import java.net.URI;
 import java.time.Duration;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import io.kestra.core.models.property.Property;
@@ -38,24 +39,36 @@ public interface MailchimpConnectionInterface {
     }
 
     private static String token(RunContext runContext, MailchimpConnectionInterface connection) throws Exception {
-        var apiKey = runContext.render(connection.getApiKey()).as(String.class).filter(s -> !s.isBlank());
-        var accessToken = runContext.render(connection.getAccessToken()).as(String.class).filter(s -> !s.isBlank());
+        var apiKey = rendered(runContext, connection.getApiKey(), "apiKey", true);
+        var accessToken = rendered(runContext, connection.getAccessToken(), "accessToken", true);
         if (apiKey.isPresent() == accessToken.isPresent()) {
             throw new IllegalArgumentException("Set exactly one of 'apiKey' or 'accessToken'");
         }
         return apiKey.orElseGet(accessToken::get);
     }
 
+    /**
+     * Renders and trims a connection property (a secret often ends with a newline). A credential or server that still
+     * holds whitespace or control characters is rejected; the message names the property, never the value.
+     */
+    private static Optional<String> rendered(RunContext runContext, Property<String> property, String name, boolean strict) throws Exception {
+        var value = runContext.render(property).as(String.class).map(String::trim).filter(s -> !s.isEmpty());
+        if (value.isPresent() && strict && value.get().chars().anyMatch(c -> c < 0x21 || c == 0x7f)) {
+            throw new IllegalArgumentException("'" + name + "' contains whitespace or control characters; check for a stray newline in the secret");
+        }
+        return value;
+    }
+
     /** API root, including the version segment, e.g. {@code https://us19.api.mailchimp.com/3.0}. */
     static String baseUrl(RunContext runContext, MailchimpConnectionInterface connection) throws Exception {
         token(runContext, connection); // validates "exactly one credential" before anything else
 
-        var explicitServer = runContext.render(connection.getServer()).as(String.class).filter(s -> !s.isBlank());
+        var explicitServer = rendered(runContext, connection.getServer(), "server", false);
         if (explicitServer.isPresent() && !SERVER.matcher(explicitServer.get()).matches()) {
             throw new IllegalArgumentException("Invalid 'server' '" + explicitServer.get() + "': expected a Mailchimp data center such as 'us19'");
         }
 
-        var rBaseUrl = runContext.render(connection.getBaseUrl()).as(String.class).filter(s -> !s.isBlank());
+        var rBaseUrl = rendered(runContext, connection.getBaseUrl(), "baseUrl", false);
         if (rBaseUrl.isPresent()) {
             var url = rBaseUrl.get().replaceAll("/+$", "");
             URI uri;
@@ -71,8 +84,8 @@ public interface MailchimpConnectionInterface {
             return url;
         }
 
-        var apiKey = runContext.render(connection.getApiKey()).as(String.class).filter(s -> !s.isBlank());
-        var server = runContext.render(connection.getServer()).as(String.class).filter(s -> !s.isBlank())
+        var apiKey = rendered(runContext, connection.getApiKey(), "apiKey", true);
+        var server = explicitServer
             .or(() -> apiKey.filter(k -> k.contains("-")).map(k -> k.substring(k.lastIndexOf('-') + 1)))
             .orElseThrow(() -> new IllegalArgumentException("'server' is required: use an apiKey ending in '-<data center>' (for example '-us19') or set 'server' (see https://login.mailchimp.com/oauth2/metadata for OAuth tokens)"));
         if (!SERVER.matcher(server).matches()) {

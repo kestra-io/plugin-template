@@ -118,7 +118,7 @@ public class CampaignSentTrigger extends AbstractMailchimpTrigger implements Pol
                 .title((String) latest.get("title"))
                 .report(report)
                 .build());
-            // Cursor saved once the execution is built, as the Box trigger does: if Kestra failed to emit it now,
+            // Cursor saved only after the execution is built (at most once): if Kestra failed to emit it now,
             // these campaigns would not fire again (at most once), but a successful poll never fires them twice.
             r.commit();
             return Optional.of(execution);

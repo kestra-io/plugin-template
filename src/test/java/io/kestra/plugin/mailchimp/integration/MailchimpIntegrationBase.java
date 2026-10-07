@@ -24,7 +24,7 @@ import jakarta.inject.Inject;
  * when they write to an audience) so that they report as skipped without credentials.
  *
  * <p>Rules: only the audience {@code MAILCHIMP_LIST_ID} is written to, members are
- * {@code kestra-it-<uuid>@<test domain>}, always written with status {@code unsubscribed},, every created member is archived in {@link #cleanup()}, and the API key is
+ * {@code kestra-it-<uuid>@<test domain>}, always written with status {@code unsubscribed}, every created member is archived in {@link #cleanup()}, and the API key is
  * never logged.
  */
 @KestraTest
