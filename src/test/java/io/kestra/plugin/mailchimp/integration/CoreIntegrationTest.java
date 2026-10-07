@@ -32,11 +32,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.Matchers.notNullValue;
 
 @EnabledIfEnvironmentVariable(named = "MAILCHIMP_API_KEY", matches = ".+")
 @EnabledIfEnvironmentVariable(named = "MAILCHIMP_LIST_ID", matches = ".+")
 class CoreIntegrationTest extends MailchimpIntegrationBase {
+    private static final String MAILCHIMP_TIME = "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}";
+
     private List<Map<String, Object>> listMembers(Instant since) throws Exception {
         return ListMembers.builder().apiKey(apiKeyProperty()).server(serverProperty())
             .listId(Property.ofValue(listId())).sinceLastChanged(Property.ofValue(since))
@@ -47,6 +50,13 @@ class CoreIntegrationTest extends MailchimpIntegrationBase {
     @Test
     void ping() throws Exception {
         var out = Ping.builder().apiKey(apiKeyProperty()).server(serverProperty()).build().run(runContextFactory.of());
+
+        assertThat(out.getHealthStatus(), containsString("Chimpy"));
+    }
+
+    @Test
+    void pingDerivesServerFromKeySuffix() throws Exception {
+        var out = Ping.builder().apiKey(apiKeyProperty()).build().run(runContextFactory.of());
 
         assertThat(out.getHealthStatus(), containsString("Chimpy"));
     }
@@ -82,7 +92,12 @@ class CoreIntegrationTest extends MailchimpIntegrationBase {
         assertThat(upserted.getEmailAddress(), equalTo(email));
         assertThat(upserted.getSubscriberHash(), equalTo(SubscriberHash.of(email)));
 
-        eventually("member listed after upsert", () -> listMembers(since), rows -> rows.stream().anyMatch(r -> email.equals(r.get("emailAddress"))));
+        var rows = eventually("member listed after upsert", () -> listMembers(since), r -> r.stream().anyMatch(x -> email.equals(x.get("emailAddress"))));
+        var row = rows.stream().filter(r -> email.equals(r.get("emailAddress"))).findFirst().orElseThrow();
+        // camelCase keys, ISO-8601 with offset and whole seconds ("2026-01-01T10:00:00+00:00")
+        assertThat(String.valueOf(row.get("lastChanged")), matchesPattern(MAILCHIMP_TIME));
+        assertThat(String.valueOf(row.get("timestampOpt")), matchesPattern(MAILCHIMP_TIME));
+        assertThat(row.get("status"), equalTo("unsubscribed"));
 
         var tagged = UpdateMemberTags.builder().apiKey(apiKeyProperty()).server(serverProperty())
             .listId(Property.ofValue(listId())).email(Property.ofValue(email))

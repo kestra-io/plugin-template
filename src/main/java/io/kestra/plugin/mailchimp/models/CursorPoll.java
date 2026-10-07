@@ -99,7 +99,8 @@ public final class CursorPoll {
 
         var cursor = stored.get();
         var query = new LinkedHashMap<>(spec.query());
-        // 1 s slack: the boundary rows come back whether `since_*` is inclusive or exclusive, the cursor drops them
+        // 1 s slack: observed against the live API, `since_*` is exclusive and has whole-second precision, so a row written
+        // later in the cursor's own second would be missed without it; the rows it brings back are dropped by the cursor
         var since = cursor.timestamp().minusSeconds(1);
         query.put("since_" + spec.timeField(), FetchOutput.iso(since.isBefore(Instant.EPOCH) ? Instant.EPOCH : since));
         query.put("sort_field", spec.timeField());

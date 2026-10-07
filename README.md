@@ -94,13 +94,15 @@ See `src/main/resources/doc/io.kestra.plugin.mailchimp.md` for rate limits, retr
 
 Optional tests in `io.kestra.plugin.mailchimp.integration` call the real Mailchimp API. They are skipped unless the environment variables below are set, so a plain `./gradlew test` never needs an account.
 
-**Warning:** use a throwaway sandbox account and audience. The tests create and archive members named `kestra-it-<uuid>@example.com` in `MAILCHIMP_LIST_ID` only. They never send a campaign, and members are always written with status `unsubscribed` so no welcome automation fires.
+**Warning:** use a throwaway sandbox account and audience. The tests create and archive members named `kestra-it-<uuid>@<domain>` (default domain `example.com`, see below) in `MAILCHIMP_LIST_ID` only. They never send a campaign, and members are always written with status `unsubscribed` so no welcome automation fires.
 
 1. Get credentials: API key from Account > Extras > API keys (`MAILCHIMP_API_KEY`, `MAILCHIMP_SERVER` is the part after the dash), audience ID from Audience > Settings > Audience name and defaults (`MAILCHIMP_LIST_ID`). Optionally set `MAILCHIMP_CAMPAIGN_ID` (an already sent campaign) to enable the report tests.
 2. Copy `.env.example` to `.env`, fill it in, and load it into your shell, e.g. `set -a; source .env; set +a`.
 3. Run `./gradlew test --tests '*integration*'`.
 
-Cleanup uses `DELETE`, which only archives members: they are not permanently deleted, and tags or audience stats may keep residual test data. If Mailchimp rejects `example.com` as a fake address, set the optional `MAILCHIMP_TEST_EMAIL_DOMAIN` to a domain you control.
+Cleanup uses `DELETE`, which only archives members: they are not permanently deleted, and tags or audience stats may keep residual test data. Mailchimp rejects `example.com`, `example.org` and `example.net` ("looks fake" / "not a valid email address"; checked against a live account), so set `MAILCHIMP_TEST_EMAIL_DOMAIN` to a domain that has MX records and ideally one you control; members are only ever written as `unsubscribed`, so nothing is mailed.
+
+Observed against a live account: `since_last_changed` / `since_timestamp_opt` are exclusive (a member whose timestamp equals the filter is not returned) with whole-second precision and `+00:00` offsets, which is why the triggers re-read one second and de-duplicate by member id. Mailchimp ignores the `X-Trigger-Error` header on `/ping` and `/lists`, so the error mapping tests use naturally failing requests (bad key 401, unknown audience 404, malformed `since_last_changed` 400); 403 and `Retry-After` on 429 could not be observed and are covered by unit tests only. `filter_bots` is accepted by `/reports/{id}/email-activity`, its filtering effect could not be observed (the sandbox campaign has no bot opens).
 
 The `Integration tests` GitHub workflow runs the same command on manual dispatch, reading the same names from repository secrets.
 
