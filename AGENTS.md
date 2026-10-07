@@ -19,7 +19,7 @@ Single-module plugin. Source package under `io.kestra.plugin`:
 
 - `mailchimp`
 
-Uses Kestra's built-in `HttpClient`; no extra HTTP client or SDK.
+Uses the JDK `java.net.http.HttpClient`; no extra HTTP client or SDK. Kestra's core `HttpClient` is not used because it replays POST on 429/503 and that retry cannot be disabled.
 
 ### Project Structure
 
