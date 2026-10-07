@@ -26,14 +26,13 @@ Uses Kestra's built-in `HttpClient`; no extra HTTP client or SDK.
 ```
 plugin-mailchimp/
 ├── src/main/java/io/kestra/plugin/mailchimp/
-├── src/test/java/io/kestra/plugin/mailchimp/
 ├── build.gradle
 └── README.md
 ```
 
 ## Local rules
 
-- Base the wording on the implemented packages and classes, not on template README text.
+- Base the wording on the implemented packages and classes.
 - Every input is a `Property<T>` rendered with `runContext.render`; secrets use `@PluginProperty(secret = true)` and `@ToString.Exclude`.
 - No live credentials in tests or in the repo.
 - Build with JDK 21 to 23 (Lombok does not support newer JDKs yet). Run `./gradlew build` before pushing: it also lints the plugin docs.
