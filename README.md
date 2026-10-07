@@ -90,6 +90,20 @@ See `src/main/resources/doc/io.kestra.plugin.mailchimp.md` for rate limits, retr
 - Credentials: copy `.env.example` to `.env` (git-ignored). The API key comes from Account > Extras > API keys in Mailchimp; the data center is the part after the dash in the key. Use a sandbox account.
 - `./gradlew test` runs the unit tests (no Mailchimp account needed). `./gradlew build` also lints the plugin docs.
 
+## Integration tests
+
+Optional tests in `io.kestra.plugin.mailchimp.integration` call the real Mailchimp API. They are skipped unless the environment variables below are set, so a plain `./gradlew test` never needs an account.
+
+**Warning:** use a throwaway sandbox account and audience. The tests create and archive members named `kestra-it-<uuid>@example.com` in `MAILCHIMP_LIST_ID` only. They never send a campaign, and members are always written with status `unsubscribed` so no welcome automation fires.
+
+1. Get credentials: API key from Account > Extras > API keys (`MAILCHIMP_API_KEY`, `MAILCHIMP_SERVER` is the part after the dash), audience ID from Audience > Settings > Audience name and defaults (`MAILCHIMP_LIST_ID`). Optionally set `MAILCHIMP_CAMPAIGN_ID` (an already sent campaign) to enable the report tests.
+2. Copy `.env.example` to `.env`, fill it in, and load it into your shell, e.g. `set -a; source .env; set +a`.
+3. Run `./gradlew test --tests '*integration*'`.
+
+Cleanup uses `DELETE`, which only archives members: they are not permanently deleted, and tags or audience stats may keep residual test data. If Mailchimp rejects `example.com` as a fake address, set the optional `MAILCHIMP_TEST_EMAIL_DOMAIN` to a domain you control.
+
+The `Integration tests` GitHub workflow runs the same command on manual dispatch, reading the same names from repository secrets.
+
 ## Running Kestra locally with this plugin
 
 1. Build the plugin: `./gradlew build` (or `./gradlew shadowJar`). The jar lands in `build/libs/`.

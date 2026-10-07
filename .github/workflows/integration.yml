@@ -1,0 +1,35 @@
+name: Integration tests
+
+# Manual only: runs against a real (sandbox) Mailchimp account using repository secrets.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - name: Check secrets
+        env:
+          MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          MAILCHIMP_LIST_ID: ${{ secrets.MAILCHIMP_LIST_ID }}
+        run: |
+          if [ -z "$MAILCHIMP_API_KEY" ] || [ -z "$MAILCHIMP_LIST_ID" ]; then
+            echo "::error::Repository secrets MAILCHIMP_API_KEY and MAILCHIMP_LIST_ID must be set; otherwise every integration test would be skipped."
+            exit 1
+          fi
+      - name: Run integration tests
+        env:
+          MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          MAILCHIMP_SERVER: ${{ secrets.MAILCHIMP_SERVER }}
+          MAILCHIMP_LIST_ID: ${{ secrets.MAILCHIMP_LIST_ID }}
+          MAILCHIMP_CAMPAIGN_ID: ${{ secrets.MAILCHIMP_CAMPAIGN_ID }}
+        run: ./gradlew test --tests '*integration*'
