@@ -1,8 +1,8 @@
-group: io.kestra.plugin.templates
-name: "template"
-title: "Template"
-description: "Plugin template for Kestra"
-body: ""
+group: io.kestra.plugin.mailchimp
+name: "mailchimp"
+title: "Mailchimp"
+description: "Tasks that connect Kestra workflows to Mailchimp."
+body: "Work in progress. Manage audiences, members, tags and campaigns in Mailchimp from Kestra flows. Authenticate with an API key or OAuth access token and keep credentials in secrets."
 videos: []
 createdBy: "Kestra Core Team"
 managedBy: "Kestra Core Team"
