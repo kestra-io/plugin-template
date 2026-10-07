@@ -1,7 +1,7 @@
 group: io.kestra.plugin.mailchimp.audiences
 name: "audiences"
 title: "Mailchimp Audiences"
-description: "Tasks that read audiences and their members in Mailchimp."
+description: "Tasks that read, add and tag audience members in Mailchimp."
 body: ""
 videos: []
 createdBy: "Kestra Core Team"
