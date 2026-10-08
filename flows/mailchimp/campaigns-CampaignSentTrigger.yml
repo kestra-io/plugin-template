@@ -1,0 +1,18 @@
+# Tests CampaignSentTrigger. Fires when a campaign has been sent (status sent) after the trigger started.
+# The FIRST poll only records the cursor and fires nothing; send a campaign after that. listId filter left unset.
+# The flow is `disabled: false`.
+id: mailchimp_campaign_sent_trigger
+namespace: company.team
+disabled: false
+
+tasks:
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "{{ trigger.count }} campaign(s) sent, latest {{ trigger.campaignId }} at {{ trigger.sendTime }}, file {{ trigger.uri }}"
+
+triggers:
+  - id: campaign_sent
+    type: io.kestra.plugin.mailchimp.campaigns.CampaignSentTrigger
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    includeReport: false
+    interval: PT30S

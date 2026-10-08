@@ -1,0 +1,22 @@
+# Tests ListMembers: fetches up to 5 members of an audience, logs only size and first status.
+# Needs secret MAILCHIMP_API_KEY; input listId (defaults to secret MAILCHIMP_LIST_ID).
+id: mailchimp_list_members
+namespace: company.team
+
+inputs:
+  - id: listId
+    type: STRING
+    required: true
+    defaults: "{{ secret('MAILCHIMP_LIST_ID') }}"
+
+tasks:
+  - id: members
+    type: io.kestra.plugin.mailchimp.audiences.ListMembers
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    listId: "{{ inputs.listId }}"
+    fetchType: FETCH
+    maxItems: 5
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Members fetched: {{ outputs.members.size }}; first status: {{ outputs.members.rows[0].status ?? 'n/a' }}"

@@ -1,0 +1,31 @@
+# Write test: adds/removes tags on an EXISTING member.
+# Inputs: email (required; use the address created by UpsertMember), listId (defaults to secret
+# MAILCHIMP_LIST_ID). Needs secret MAILCHIMP_API_KEY.
+# Cleanup: the member is archived afterwards by the test harness, not by this flow.
+id: mailchimp_update_member_tags
+namespace: company.team
+
+inputs:
+  - id: listId
+    type: STRING
+    required: true
+    defaults: "{{ secret('MAILCHIMP_LIST_ID') }}"
+  - id: email
+    type: STRING
+    required: true
+
+tasks:
+  - id: tags
+    type: io.kestra.plugin.mailchimp.audiences.UpdateMemberTags
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    listId: "{{ inputs.listId }}"
+    email: "{{ inputs.email }}"
+    tags:
+      - name: kestra-it-added
+        status: active
+      - name: kestra-it
+        status: inactive
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Applied {{ outputs.tags.applied | length }} tag change(s)"

@@ -1,0 +1,19 @@
+# Tests MemberStatusChangeTrigger. Fires when a member with status UNSUBSCRIBED is changed in the sandbox audience.
+# The FIRST poll only records the cursor and fires nothing; unsubscribe a member after that.
+# The flow is `disabled: false`.
+id: mailchimp_member_status_change_trigger
+namespace: company.team
+disabled: false
+
+tasks:
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "{{ trigger.count }} unsubscribed member(s) in list {{ trigger.listId }}, cursor {{ trigger.cursor }}, file {{ trigger.uri }}"
+
+triggers:
+  - id: member_unsubscribed
+    type: io.kestra.plugin.mailchimp.audiences.MemberStatusChangeTrigger
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    listId: "{{ secret('MAILCHIMP_LIST_ID') }}"
+    status: UNSUBSCRIBED
+    interval: PT30S
