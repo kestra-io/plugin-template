@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @NoArgsConstructor
 public abstract class AbstractMailchimpTask extends Task implements MailchimpConnectionInterface {
@@ -57,6 +57,7 @@ public abstract class AbstractMailchimpTask extends Task implements MailchimpCon
     @Builder.Default
     @Schema(
         title = "Max retries",
+        minimum = "0",
         description = "Retries on HTTP 429 (all methods) and on 5xx or I/O errors (GET and PUT only), with exponential backoff. `0` disables retries."
     )
     @PluginProperty(group = "advanced")

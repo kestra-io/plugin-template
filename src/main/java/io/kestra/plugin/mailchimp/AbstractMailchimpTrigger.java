@@ -58,6 +58,7 @@ public abstract class AbstractMailchimpTrigger extends AbstractTrigger implement
     @Builder.Default
     @Schema(
         title = "Max retries",
+        minimum = "0",
         description = "Retries on HTTP 429 (all methods) and on 5xx or I/O errors (GET and PUT only), with exponential backoff. `0` disables retries."
     )
     @PluginProperty(group = "advanced")

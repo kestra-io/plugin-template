@@ -25,7 +25,7 @@ Every task and trigger accept the same connection properties. Store credentials 
 1. **API key** (`apiKey`): the data center (`server`) is read from the key suffix, e.g. `-us19`. Set `server` only to override it.
 2. **OAuth access token** (`accessToken`): `server` is then required (for example `us19`). Run the OAuth code flow once outside Kestra, read the `dc` value from `https://login.mailchimp.com/oauth2/metadata`, and store the token as a secret.
 
-The credential is sent in an `Authorization: Bearer` header, never in the URL, and redirects are not followed. `baseUrl` replaces the API root for testing and proxies only; it must be `https`, or `http` on `localhost` / `127.0.0.1`.
+The credential is sent in an `Authorization: Bearer` header, never in the URL, and redirects are not followed. `baseUrl` replaces the API root for testing and proxies only. **It receives your credential**, so only set it to a host you trust; it must be `https`, or `http` on `localhost` / `127.0.0.1`.
 
 ## Example
 
