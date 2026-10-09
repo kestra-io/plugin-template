@@ -16,3 +16,6 @@ out/
 src/test/resources/application-test.yml
 .factorypath
 bin/
+.env
+.env.local
+.superpowers/

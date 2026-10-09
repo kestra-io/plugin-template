@@ -1,0 +1,36 @@
+# Write test: creates ONE member with a generated address, status UNSUBSCRIBED (never emailed).
+# Inputs: listId (defaults to secret MAILCHIMP_LIST_ID), emailDomain. Needs secret MAILCHIMP_API_KEY.
+# Cleanup: the member is archived afterwards by the test harness, not by this flow.
+id: mailchimp_upsert_member
+namespace: company.team
+
+inputs:
+  - id: listId
+    type: STRING
+    required: true
+    defaults: "{{ secret('MAILCHIMP_LIST_ID') }}"
+  - id: emailDomain
+    type: STRING
+    required: true
+    defaults: kestra.io
+
+tasks:
+  - id: address
+    type: io.kestra.plugin.core.output.OutputValues
+    values:
+      email: "kestra-it-{{ randomInt(100000, 999999) }}@{{ inputs.emailDomain }}"
+
+  - id: upsert
+    type: io.kestra.plugin.mailchimp.audiences.UpsertMember
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    listId: "{{ inputs.listId }}"
+    email: "{{ outputs.address.values.email }}"
+    statusIfNew: UNSUBSCRIBED
+    mergeFields:
+      FNAME: Kestra
+    tags:
+      - kestra-it
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Upserted member, status={{ outputs.upsert.status }}"

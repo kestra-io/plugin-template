@@ -1,0 +1,18 @@
+# Tests NewSubscriberTrigger. Fires when a member becomes `subscribed` in the sandbox audience.
+# The FIRST poll only records the cursor and fires nothing; subscribe a member after that.
+# The flow is `disabled: false`.
+id: mailchimp_new_subscriber_trigger
+namespace: company.team
+disabled: false
+
+tasks:
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "{{ trigger.count }} new subscriber(s) in list {{ trigger.listId }}, cursor {{ trigger.cursor }}, file {{ trigger.uri }}"
+
+triggers:
+  - id: new_subscriber
+    type: io.kestra.plugin.mailchimp.audiences.NewSubscriberTrigger
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    listId: "{{ secret('MAILCHIMP_LIST_ID') }}"
+    interval: PT30S

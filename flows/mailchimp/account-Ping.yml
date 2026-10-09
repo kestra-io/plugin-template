@@ -1,0 +1,13 @@
+# Tests Ping: verifies the Mailchimp API key and logs the health status.
+# Needs secret MAILCHIMP_API_KEY; no inputs.
+id: mailchimp_ping
+namespace: company.team
+
+tasks:
+  - id: ping
+    type: io.kestra.plugin.mailchimp.account.Ping
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Health status: {{ outputs.ping.healthStatus }}"

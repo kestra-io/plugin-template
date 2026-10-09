@@ -1,0 +1,37 @@
+# Write test: builds an ION file with 3 generated members (status unsubscribed, never emailed)
+# and sends them in one batch. Inputs: listId (defaults to secret MAILCHIMP_LIST_ID), emailDomain.
+# Needs secret MAILCHIMP_API_KEY.
+# Cleanup: the members are archived afterwards by the test harness, not by this flow.
+id: mailchimp_batch_subscribe
+namespace: company.team
+
+inputs:
+  - id: listId
+    type: STRING
+    required: true
+    defaults: "{{ secret('MAILCHIMP_LIST_ID') }}"
+  - id: emailDomain
+    type: STRING
+    required: true
+    defaults: kestra.io
+
+tasks:
+  - id: members
+    type: io.kestra.plugin.core.storage.Write
+    extension: .ion
+    content: |
+      {emailAddress: "kestra-it-{{ randomInt(100000, 999999) }}@{{ inputs.emailDomain }}", status: "unsubscribed", tags: ["kestra-it"]}
+      {emailAddress: "kestra-it-{{ randomInt(100000, 999999) }}@{{ inputs.emailDomain }}", status: "unsubscribed", tags: ["kestra-it"]}
+      {emailAddress: "kestra-it-{{ randomInt(100000, 999999) }}@{{ inputs.emailDomain }}", status: "unsubscribed", mergeFields: {FNAME: "Kestra"}}
+
+  - id: subscribe
+    type: io.kestra.plugin.mailchimp.audiences.BatchSubscribe
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    listId: "{{ inputs.listId }}"
+    from: "{{ outputs.members.uri }}"
+    updateExisting: false
+    failOnError: true
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "created={{ outputs.subscribe.totalCreated }} updated={{ outputs.subscribe.totalUpdated }} errors={{ outputs.subscribe.errorCount }} batches={{ outputs.subscribe.batches }}"

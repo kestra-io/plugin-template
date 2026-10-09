@@ -1,0 +1,20 @@
+# Tests GetCampaignReport: fetches the report of a sent campaign and logs its id and emails sent.
+# Needs secret MAILCHIMP_API_KEY; input campaignId (defaults to the account's already-sent campaign; read-only).
+id: mailchimp_get_campaign_report
+namespace: company.team
+
+inputs:
+  - id: campaignId
+    type: STRING
+    required: true
+    defaults: c7853c3852
+
+tasks:
+  - id: report
+    type: io.kestra.plugin.mailchimp.reports.GetCampaignReport
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    campaignId: "{{ inputs.campaignId }}"
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Report for {{ outputs.report.row.id }}: emailsSent={{ outputs.report.row.emailsSent }}"

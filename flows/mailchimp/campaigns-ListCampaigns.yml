@@ -1,0 +1,15 @@
+# Tests ListCampaigns: fetches up to 5 campaigns and logs count and first campaign title.
+# Needs secret MAILCHIMP_API_KEY; no inputs.
+id: mailchimp_list_campaigns
+namespace: company.team
+
+tasks:
+  - id: campaigns
+    type: io.kestra.plugin.mailchimp.campaigns.ListCampaigns
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    fetchType: FETCH
+    maxItems: 5
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Campaigns fetched: {{ outputs.campaigns.size }}; first: {{ outputs.campaigns.rows[0].title ?? 'n/a' }}"

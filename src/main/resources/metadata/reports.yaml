@@ -1,0 +1,8 @@
+group: io.kestra.plugin.mailchimp.reports
+name: "reports"
+title: "Mailchimp Reports"
+description: "Tasks that read campaign reports and email activity in Mailchimp."
+body: ""
+videos: []
+createdBy: "Community"
+managedBy: "Community"

@@ -1,0 +1,15 @@
+# Tests ListAudiences: fetches up to 5 audiences and logs count and first audience name.
+# Needs secret MAILCHIMP_API_KEY; no inputs.
+id: mailchimp_list_audiences
+namespace: company.team
+
+tasks:
+  - id: audiences
+    type: io.kestra.plugin.mailchimp.audiences.ListAudiences
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    fetchType: FETCH
+    maxItems: 5
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Audiences fetched: {{ outputs.audiences.size }} (total {{ outputs.audiences.total }}); first: {{ outputs.audiences.rows[0].name ?? 'n/a' }}"

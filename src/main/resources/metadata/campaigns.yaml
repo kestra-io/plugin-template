@@ -1,0 +1,8 @@
+group: io.kestra.plugin.mailchimp.campaigns
+name: "campaigns"
+title: "Mailchimp Campaigns"
+description: "Tasks and a trigger that list, send and watch Mailchimp campaigns."
+body: ""
+videos: []
+createdBy: "Community"
+managedBy: "Community"

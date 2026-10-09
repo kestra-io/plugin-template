@@ -1,10 +1,10 @@
 {
-  "name": "plugin-template",
+  "name": "plugin-mailchimp",
   "build": {
     "context": ".",
     "dockerfile": "Dockerfile"
   },
-  "workspaceFolder": "/workspaces/plugin-template",
+  "workspaceFolder": "/workspaces/plugin-mailchimp",
   "forwardPorts": [8080],
   "customizations": {
     "vscode": {

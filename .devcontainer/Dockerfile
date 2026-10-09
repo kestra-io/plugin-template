@@ -16,7 +16,7 @@ ENV HOME="/root"
 # --------------------------------------
 # Need to add the devcontainer workspace folder as a safe directory to enable git 
 # version control system to be enabled in the containers file system.
-RUN git config --global --add safe.directory "/workspaces/plugin-template"
+RUN git config --global --add safe.directory "/workspaces/plugin-mailchimp"
 # --------------------------------------
 
 # --------------------------------------
@@ -53,7 +53,7 @@ ENV PATH="$PATH:$JAVA_HOME/bin"
 # Will load a custom configuration file for Micronaut
 ENV MICRONAUT_ENVIRONMENTS=local,override
 # Sets the path where you save plugins as Jar and is loaded during the startup process
-ENV KESTRA_PLUGINS_PATH="/workspaces/plugin-template/local/plugins"
+ENV KESTRA_PLUGINS_PATH="/workspaces/plugin-mailchimp/local/plugins"
 # --------------------------------------
 
 # --------------------------------------

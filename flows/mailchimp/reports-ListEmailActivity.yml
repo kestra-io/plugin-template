@@ -1,0 +1,22 @@
+# Tests ListEmailActivity: fetches up to 5 recipients' activity of a campaign, logs only size.
+# Needs secret MAILCHIMP_API_KEY; input campaignId (defaults to the account's already-sent campaign; read-only).
+id: mailchimp_list_email_activity
+namespace: company.team
+
+inputs:
+  - id: campaignId
+    type: STRING
+    required: true
+    defaults: c7853c3852
+
+tasks:
+  - id: activity
+    type: io.kestra.plugin.mailchimp.reports.ListEmailActivity
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    campaignId: "{{ inputs.campaignId }}"
+    fetchType: FETCH
+    maxItems: 5
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Email activity records: {{ outputs.activity.size }}"

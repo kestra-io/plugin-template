@@ -35,24 +35,83 @@
 </p>
 <p align="center" style="color:grey;"><i>Get started with Kestra in 3 minutes.</i></p>
 
-# Kestra Plugin Template
+# Kestra Mailchimp Plugin
 
 ## Why
 
-- What user problem does this solve? Teams need a concrete starting point for building and validating new Kestra plugins without recreating the same project scaffolding from scratch.
-- Why would a team adopt this plugin in a workflow? It gives plugin authors a ready-made reference repo they can adapt alongside their own build, test, and publishing workflow.
-- What operational/business outcome does it enable? It shortens plugin delivery time, reduces setup mistakes, and makes internal or partner plugin development more repeatable.
+- Manage Mailchimp audiences, members, tags and campaigns from Kestra flows without custom API scripts, next to the rest of your data preparation, retries and notifications.
 
 ## What
 
-- Provides plugin components under `io.kestra.plugin.templates`.
-- Includes classes such as `Example`, `Trigger`.
+Plugin components under `io.kestra.plugin.mailchimp`:
+
+| Task or trigger | What it does |
+|---|---|
+| `account.Ping` | Check credentials and data center |
+| `audiences.ListAudiences` | List audiences |
+| `audiences.ListMembers` | List the members of an audience |
+| `audiences.UpsertMember` | Add or update one member |
+| `audiences.BatchSubscribe` | Subscribe or update many members from an ION file |
+| `audiences.UpdateMemberTags` | Add or remove tags on a member |
+| `campaigns.ListCampaigns` | List campaigns |
+| `campaigns.SendCampaign` | Send a campaign (irreversible; checks the send checklist first) |
+| `reports.GetCampaignReport` | Get the report summary of a sent campaign |
+| `reports.ListEmailActivity` | List per-recipient activity of a sent campaign |
+| `audiences.NewSubscriberTrigger` | Start an execution for new subscribers |
+| `audiences.MemberStatusChangeTrigger` | Start an execution when members get a status (e.g. unsubscribed) |
+| `campaigns.CampaignSentTrigger` | Start an execution for sent campaigns |
+
+List tasks take a `fetchType` (`FETCH`, `FETCH_ONE`, `STORE`, `NONE`). Triggers poll every `PT5M` by default (minimum `PT30S`), keep their position in the namespace KV Store, and do not fire on the first poll.
+
+## Authentication
+
+Set exactly one of `apiKey` or `accessToken` on every task and trigger, and keep it in a secret:
+
+- `apiKey`: the data center is read from the key suffix (`...-us19`). `server` overrides it.
+- `accessToken` (OAuth): `server` is required. Get the token once outside Kestra and read `dc` from `https://login.mailchimp.com/oauth2/metadata`.
+
+## Example
+
+```yaml
+id: mailchimp_ping
+namespace: company.team
+
+tasks:
+  - id: ping
+    type: io.kestra.plugin.mailchimp.account.Ping
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+```
+
+See `src/main/resources/doc/io.kestra.plugin.mailchimp.md` for rate limits, retries, trigger behavior and consent notes.
+
+## Setup
+
+- JDK 21 to 23 (Lombok does not support newer JDKs yet) and Docker with Docker Compose.
+- Credentials: copy `.env.example` to `.env` (git-ignored). The API key comes from Account > Extras > API keys in Mailchimp; the data center is the part after the dash in the key. Use a sandbox account.
+- `./gradlew test` runs the unit tests (no Mailchimp account needed). `./gradlew build` also lints the plugin docs.
+
+## Integration tests
+
+Optional tests in `io.kestra.plugin.mailchimp.integration` call the real Mailchimp API. They are skipped unless the environment variables below are set, so a plain `./gradlew test` never needs an account.
+
+**Warning:** use a throwaway sandbox account and audience. The tests create and archive members named `kestra-it-<uuid>@<domain>` (default domain `example.com`, see below) in `MAILCHIMP_LIST_ID` only. They never send a campaign, and members are always written with status `unsubscribed` so no welcome automation fires.
+
+1. Get credentials: API key from Account > Extras > API keys (`MAILCHIMP_API_KEY`, `MAILCHIMP_SERVER` is the part after the dash), audience ID from Audience > Settings > Audience name and defaults (`MAILCHIMP_LIST_ID`). Optionally set `MAILCHIMP_CAMPAIGN_ID` (an already sent campaign) to enable the report tests.
+2. Copy `.env.example` to `.env`, fill it in, and load it into your shell, e.g. `set -a; source .env; set +a`.
+3. Run `./gradlew test --tests '*integration*'`.
+
+Cleanup uses `DELETE`, which only archives members: they are not permanently deleted, and tags or audience stats may keep residual test data. Mailchimp rejects `example.com`, `example.org` and `example.net` ("looks fake" / "not a valid email address"; checked against a live account), so set `MAILCHIMP_TEST_EMAIL_DOMAIN` to a domain that has MX records and ideally one you control; members are only ever written as `unsubscribed`, so nothing is mailed.
+
+Observed against a live account: `since_last_changed` / `since_timestamp_opt` are exclusive (a member whose timestamp equals the filter is not returned) with whole-second precision and `+00:00` offsets, which is why the triggers re-read one second and de-duplicate by member id. Mailchimp ignores the `X-Trigger-Error` header on `/ping` and `/lists`, so the error mapping tests use naturally failing requests (bad key 401, unknown audience 404, malformed `since_last_changed` 400); 403 and `Retry-After` on 429 could not be observed and are covered by unit tests only. `filter_bots` is accepted by `/reports/{id}/email-activity`, its filtering effect could not be observed (the sandbox campaign has no bot opens).
+
+The `Integration tests` GitHub workflow runs the same command on manual dispatch, reading the same names from repository secrets.
 
 ## Running Kestra locally with this plugin
 
-1. Build the shadow JAR: `./gradlew shadowJar`. The output lands in `build/libs/`.
-2. Run `docker compose up`. `docker-compose.yml` builds `kestra/kestra:latest` and mounts `build/libs/` to `/app/plugins/`, so Kestra picks up the jar on startup.
+1. Build the plugin: `./gradlew build` (or `./gradlew shadowJar`). The jar lands in `build/libs/`.
+2. Run `docker compose up`. `docker-compose.yml` builds the Kestra image from `Dockerfile` and mounts `build/libs/` to `/app/plugins/`, so Kestra picks up the jar on startup.
 3. Kestra UI is available at [localhost:8080](http://localhost:8080).
+4. `{{ secret('MAILCHIMP_API_KEY') }}` reads the environment variable `SECRET_MAILCHIMP_API_KEY`, whose value is the base64 of the key, without a trailing newline: `printf '%s' "$KEY" | base64`. `docker-compose.yml` passes your git-ignored `.env` (copied from `.env.example`) to the container, so every `SECRET_*` variable in it becomes a Kestra secret (compose v2.24 or newer; without a `.env` the container starts without them).
 
 ### Plugins folder gotcha
 

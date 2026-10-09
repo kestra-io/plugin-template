@@ -1,0 +1,21 @@
+# WARNING: this flow really sends the campaign email to its whole audience. Run only with explicit approval and a sandbox campaign.
+# Inputs: campaignId (required, no default). Needs secret MAILCHIMP_API_KEY.
+# requireReady: true makes the task fail, without sending, if the send checklist is not ready.
+id: mailchimp_send_campaign
+namespace: company.team
+
+inputs:
+  - id: campaignId
+    type: STRING
+    required: true
+
+tasks:
+  - id: send
+    type: io.kestra.plugin.mailchimp.campaigns.SendCampaign
+    apiKey: "{{ secret('MAILCHIMP_API_KEY') }}"
+    campaignId: "{{ inputs.campaignId }}"
+    requireReady: true
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "Send accepted={{ outputs.send.sent }}, checklistReady={{ outputs.send.checklistReady }}"
