@@ -1,6 +1,6 @@
 plugins {
     id("io.github.ben-manes.versions.settings") version "0.64.0"
-    id 'io.kestra.gradle.logger' version '1.2.11'
+    id 'io.kestra.gradle.logger' version '1.2.12'
 }
 
 rootProject.name = 'plugin-template'
