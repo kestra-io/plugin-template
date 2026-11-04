@@ -1,27 +1,87 @@
 # See GitHub's docs for more information on this file:
 # https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/configuration-options-for-dependency-updates
+
 version: 2
+
 updates:
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      # Check for updates to GitHub Actions every weekday
-      interval: "weekly"
-    labels:
-      - "dependency-upgrade"
-    open-pull-requests-limit: 50
+      interval: "daily"
+      timezone: "Europe/Paris"
+      time: "06:00"
+    # cooldown never delays security updates, Kestra's own actions are never delayed
+    cooldown:
+      default-days: 7
+      exclude: ["kestra-io/*"]
+    commit-message:
+      prefix: "build(deps)"
+    open-pull-requests-limit: 20
+    labels: ["dependency-upgrade", "area/plugin"]
+    groups:
+      security-updates:
+        applies-to: security-updates
+        patterns: ["*"]
+      github-actions:
+        applies-to: version-updates
+        patterns: ["*"]
 
   # Maintain dependencies for Gradle modules
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      # Check for updates to Gradle modules every week
-      interval: "weekly"
-    labels:
-      - "dependency-upgrade"
-    open-pull-requests-limit: 50
+      interval: "daily"
+      timezone: "Europe/Paris"
+      time: "06:00"
+    # cooldown never delays security updates, Kestra's own artifacts are never delayed
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 7
+      semver-patch-days: 7
+      exclude: ["io.kestra*"]
+    commit-message:
+      prefix: "build(deps)"
+    open-pull-requests-limit: 20
+    labels: ["dependency-upgrade", "area/plugin"]
     groups:
+      security-updates:
+        applies-to: security-updates
+        patterns: ["*"]
       kestra-gradle-plugins:
-        patterns:
-          - "io.kestra.gradle.*"
+        applies-to: version-updates
+        patterns: ["io.kestra.gradle.*"]
+      gradle-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
+        patterns: ["*"]
+
+  # Maintain dependencies for NPM modules (plugin UI)
+  - package-ecosystem: "npm"
+    directory: "/ui"
+    commit-message:
+      prefix: "build(deps)"
+      prefix-development: "build(deps)"
+    schedule:
+      interval: "daily"
+      timezone: "Europe/Paris"
+      time: "06:00"
+    # cooldown never delays security updates, Kestra's own packages are never delayed
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 7
+      semver-patch-days: 7
+      exclude: ["@kestra-io/*"]
+    open-pull-requests-limit: 20
+    labels: ["dependency-upgrade", "area/plugin"]
+    groups:
+      # must stay first: a dependency is assigned to the first group matching it
+      security-updates:
+        applies-to: security-updates
+        patterns: ["*"]
+      npm-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
+        patterns: ["*"]
