@@ -13,4 +13,4 @@ services:
     # works around "Unable to create JFR repository directory using base
     # location (/tmp)" on some hosts, see kestra-io/kestra#17405
     tmpfs:
-      - /tmp
+      - /tmp:exec
